@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="music_type_array">
+        <item>@string/strTypePlayList</item>
+        <item>@string/strTypeArtist</item>
+        <item>@string/strTypeAlbum</item>
+        <item>@string/strTypeMusic</item>
+        <item>@string/strTypeSchool</item>
+    </string-array>
+</resources>

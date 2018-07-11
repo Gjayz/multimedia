@@ -1,10 +1,12 @@
 package com.gjayz.multimedia.swipeback;
 
 public interface SwipeListener {
-        void onScroll(float percent, int px);
-        void onEdgeTouch();
-        /**
-         * Invoke when scroll percent over the threshold for the first time
-         */
-        void onScrollToClose();
-    }
+    void onScroll(float percent, int px);
+
+    void onEdgeTouch();
+
+    /**
+     * Invoke when scroll percent over the threshold for the first time
+     */
+    void onScrollToClose();
+}

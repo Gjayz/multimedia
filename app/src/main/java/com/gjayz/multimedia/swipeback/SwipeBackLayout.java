@@ -239,7 +239,7 @@ public class SwipeBackLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (!mEnable||mDisallowIntercept) {
+        if (!mEnable || mDisallowIntercept) {
             return false;
         }
         try {
@@ -317,7 +317,7 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     public void attachToActivity(Activity activity) {
-        if (getParent()!=null){
+        if (getParent() != null) {
             return;
         }
         mActivity = activity;
@@ -328,8 +328,8 @@ public class SwipeBackLayout extends FrameLayout {
         a.recycle();
 
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
-        View decorChild  = decor.findViewById(android.R.id.content);
-        while (decorChild.getParent() != decor){
+        View decorChild = decor.findViewById(android.R.id.content);
+        while (decorChild.getParent() != decor) {
             decorChild = (View) decorChild.getParent();
         }
         decorChild.setBackgroundResource(background);
@@ -339,8 +339,8 @@ public class SwipeBackLayout extends FrameLayout {
         decor.addView(this);
     }
 
-    public void removeFromActivity(Activity activity){
-        if (getParent()==null)return;
+    public void removeFromActivity(Activity activity) {
+        if (getParent() == null) return;
         ViewGroup decorChild = (ViewGroup) getChildAt(0);
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
         decor.removeView(this);
@@ -399,7 +399,7 @@ public class SwipeBackLayout extends FrameLayout {
                 }
             }
             if (mScrollPercent >= 1) {
-                if (!mActivity.isFinishing()){
+                if (!mActivity.isFinishing()) {
                     if (mListeners != null && !mListeners.isEmpty()
                             && mScrollPercent >= mScrollThreshold && mIsScrollOverValid) {
                         mIsScrollOverValid = false;

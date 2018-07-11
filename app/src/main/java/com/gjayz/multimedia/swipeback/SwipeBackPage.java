@@ -6,10 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.ViewGroup;
 
-/**
- * Created by Mr.Jude on 2015/8/3.
- * 每个滑动页面的管理
- */
 public class SwipeBackPage {
     //仅为判断是否需要将mSwipeBackLayout注入进去
     private boolean mEnable = true;

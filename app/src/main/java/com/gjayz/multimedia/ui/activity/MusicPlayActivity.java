@@ -1,4 +1,4 @@
-package com.gjayz.multimedia.ui;
+package com.gjayz.multimedia.ui.activity;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.utils.StatusBarUtils;
@@ -14,7 +14,7 @@ public class MusicPlayActivity extends BaseActivity {
     public void initActivity() {
     }
 
-    public void adjustStatusBar(){
+    public void adjustStatusBar() {
         StatusBarUtils.setTranslucentStatus(this, R.color.transparent);
         StatusBarUtils.needStatusBarPadding(this);
     }
@@ -22,6 +22,5 @@ public class MusicPlayActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        StatusBarUtils.setStatusBatTextColor(this, true);
     }
 }

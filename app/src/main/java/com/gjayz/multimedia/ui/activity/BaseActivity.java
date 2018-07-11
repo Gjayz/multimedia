@@ -1,12 +1,13 @@
-package com.gjayz.multimedia.ui;
+package com.gjayz.multimedia.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.swipeback.SwipeBackHelper;
 import com.gjayz.multimedia.utils.StatusBarUtils;
+
+import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -20,18 +21,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .setSwipeRelateEnable(true)
                 .setSwipeRelateOffset(300);
         setContentView(layoutId());
+        ButterKnife.bind(this);
         initActivity();
-        adjustStatusBar();
     }
 
     public abstract int layoutId();
 
     public abstract void initActivity();
-
-    public void adjustStatusBar(){
-//        StatusBarUtils.setTranslucentStatus(this, R.color.transparent);
-//        StatusBarUtils.needStatusBarPadding(this);
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
