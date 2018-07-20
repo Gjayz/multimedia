@@ -6,13 +6,17 @@
             android:id="@+id/nav_enjoynow"
             android:title="@string/strEnjoyNow" />
         <item
-            android:id="@+id/nav_muscilibary"
+            android:id="@+id/nav_musiclibary"
             android:title="@string/strMuscilibary" />
     </group>
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="search"
+        android:id="@+id/action_setting"
+        android:title="@string/strSettings"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/strAbout"
         app:showAsAction="ifRoom" />
 </menu>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
 /*
 ** Copyright 2007, The Android Open Source Project
 **
@@ -17,8 +16,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="onesong" msgid="8336826100414159413">"1 首歌曲"</string>
     <plurals name="Nsongs" formatted="false" msgid="6016461352893352675">
         <item quantity="other"><xliff:g id="COUNT_1">%d</xliff:g> 首歌曲</item>
@@ -174,4 +172,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="strSettings">设置</string>
+    <string name="strAbout">关于</string>
+    <string name="strConfirm">确认</string>
+    <string name="strNeedPermissionToShowSongDetails">需要读写文件的权限,为了完整的显示歌曲信息</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

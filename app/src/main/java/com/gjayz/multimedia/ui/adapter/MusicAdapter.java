@@ -14,6 +14,9 @@ import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.media.MediaInfoUtil;
 import com.gjayz.multimedia.music.bean.MusicInfo;
 import com.gjayz.multimedia.utils.FileUtil;
+import com.gjayz.multimedia.utils.ZXUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -22,13 +25,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
     private Context mContext;
     private List<MusicInfo> mMusicInfos;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(View v, int postion);
     }
 
     private OnItemClickListener mOnItemClickListener;
 
-    public MusicAdapter(Context context, List<MusicInfo> musicInfos){
+    public MusicAdapter(Context context, List<MusicInfo> musicInfos) {
         mContext = context;
         mMusicInfos = musicInfos;
     }
@@ -48,13 +51,21 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
     public void onBindViewHolder(@NonNull MusicHolder holder, final int position) {
         MusicInfo musicInfo = mMusicInfos.get(position);
         holder.mMusicIndexView.setText(String.valueOf(position + 1));
-        holder.mMusicAlbumView.setImageBitmap(MediaInfoUtil.getArtwork(mContext, musicInfo.getId(), musicInfo.getAlbumId(), false, true));
+        try {
+            ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(musicInfo.getAlbumId()).toString(),
+                    holder.mMusicAlbumView, new DisplayImageOptions.Builder().cacheInMemory(true)
+                            .showImageOnLoading(R.drawable.ic_empty_music2)
+                            .resetViewBeforeLoading(true).build());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         holder.mMusicNameView.setText(musicInfo.getTitle());
         holder.mMusicArtistView.setText(FileUtil.formatFileSize(0, musicInfo.getSize()) + " " + musicInfo.getArtist() + " - " + musicInfo.getAlbumName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnItemClickListener != null){
+                if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(v, position);
                 }
             }

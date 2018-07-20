@@ -2,7 +2,6 @@ package com.gjayz.multimedia.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicManager;
@@ -28,14 +27,6 @@ public class PlayListFragment extends BaseFragment {
     public void init() {
         mMusicList = MusicManager.getInstance(mContext).getMusicList();
         MusicAdapter musicAdapter = new MusicAdapter(mContext, mMusicList);
-        musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int postion) {
-//                MusicInfo musicInfo = mMusicList.get(postion);
-//                playMusic(postion, musicInfo.getPath());
-            }
-        });
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(musicAdapter);
     }
