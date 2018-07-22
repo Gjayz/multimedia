@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void initActivity() {
+        mNavigationView.getMenu().getItem(1).setChecked(true);
         mNavigationView.setNavigationItemSelectedListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ZXPermission.init(this);
@@ -71,8 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         showMusicListFragment();
 
-        SwipeBackHelper.getCurrentPage(this)
-                .setSwipeBackEnable(false);
+        SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(false);
         SwipeBackHelper.getCurrentPage(this).setDisallowInterceptTouchEvent(true);
     }
 
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.nav_musiclibary:
-                if (!mNavigationView.getMenu().getItem(1).isChecked()){
+                if (!mNavigationView.getMenu().getItem(1).isChecked()) {
                     showMusicListFragment();
                 }
                 break;
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     /**
      * 显示列表界面
      */
-    private void showMusicListFragment(){
+    private void showMusicListFragment() {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         Fragment fragment = MusicLibaryFragment.newInstance(getString(R.string.strMusicKu));
         FragmentTransaction transaction = supportFragmentManager.beginTransaction();
@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     /**
      * 显示列表界面
      */
-    private void showEnjoyMusicFragment(){
+    private void showEnjoyMusicFragment() {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         Fragment fragment = EnjoyMusicFragment.newInstance(getString(R.string.strEnjoyNow));
         FragmentTransaction transaction = supportFragmentManager.beginTransaction();

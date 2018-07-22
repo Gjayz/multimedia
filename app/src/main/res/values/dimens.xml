@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nav_siger_name_textsize">15sp</dimen>
+    <dimen name="nav_music_name_textsize">15sp</dimen>
+
+</resources>

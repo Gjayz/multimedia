@@ -7,4 +7,5 @@
     <color name="statuaBarWhiteColor">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
+    <color name="gray">#44888888</color>
 </resources>

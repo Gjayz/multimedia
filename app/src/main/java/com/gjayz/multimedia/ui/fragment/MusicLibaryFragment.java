@@ -2,6 +2,7 @@ package com.gjayz.multimedia.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -27,6 +28,8 @@ public class MusicLibaryFragment extends BaseFragment {
     ViewPager mViewPager;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout mCoordinatorLayout;
 
     private MusicPageAdapter mMusicPageAdapter;
     private String mTitle;
@@ -77,9 +80,9 @@ public class MusicLibaryFragment extends BaseFragment {
         TabLayoutUtil.fixTabLayoutWidthWarp(mTabLayout);
     }
 
-    private void initToolBar(){
+    private void initToolBar() {
         Activity activity = getActivity();
-        if (activity instanceof MainActivity){
+        if (activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) activity;
 
             mToolbar.setTitle(mTitle);

@@ -4,19 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_enjoynow"
+            android:icon="@drawable/music_note_white"
             android:title="@string/strEnjoyNow" />
         <item
             android:id="@+id/nav_musiclibary"
+            android:icon="@drawable/library_music_white"
             android:title="@string/strMuscilibary" />
     </group>
 
-    <item
-        android:id="@+id/action_setting"
-        android:title="@string/strSettings"
-        app:showAsAction="ifRoom" />
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/action_setting"
+            android:icon="@drawable/settings_white"
+            android:title="@string/strSettings"
+            app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_about"
-        android:title="@string/strAbout"
-        app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_about"
+            android:icon="@drawable/information_white"
+            android:title="@string/strAbout"
+            app:showAsAction="ifRoom" />
+    </group>
 </menu>

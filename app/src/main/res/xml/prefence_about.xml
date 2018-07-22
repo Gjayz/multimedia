@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strAbout">
+
+        <Preference
+            android:key="key_about_author"
+            android:summary="@string/strAuthorInfo"
+            android:title="@string/strAboutAuthor" />
+
+    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
+
+    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strSoft">
+
+        <Preference
+            android:key="key_soft_version"
+            android:title="@string/strSoftVersion" />
+
+        <Preference
+            android:key="key_device_info"
+            android:title="@string/strDeviceInfo" />
+
+        <Preference
+            android:key="key_network"
+            android:title="@string/strNetwork" />
+
+    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
+
+</PreferenceScreen>
