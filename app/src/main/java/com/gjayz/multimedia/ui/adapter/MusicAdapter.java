@@ -6,13 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
-import com.gjayz.multimedia.media.MediaInfoUtil;
-import com.gjayz.multimedia.music.bean.MusicInfo;
+import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.music.player.ListType;
+import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.utils.FileUtil;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -23,21 +23,24 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder> {
 
     private Context mContext;
-    private List<MusicInfo> mMusicInfos;
+    private List<SongInfo> mMusicInfos;
+    private long[] mSongIds;
 
-    public interface OnItemClickListener {
-        void onItemClick(View v, int postion);
+    private void  getSongIds(){
+        if (mMusicInfos != null){
+            int size = mMusicInfos.size();
+            mSongIds = new long[size];
+            for (int i = 0; i < size; i ++){
+                SongInfo songInfo = mMusicInfos.get(i);
+                mSongIds[i] = songInfo.getId();
+            }
+        }
     }
 
-    private OnItemClickListener mOnItemClickListener;
-
-    public MusicAdapter(Context context, List<MusicInfo> musicInfos) {
+    public MusicAdapter(Context context, List<SongInfo> musicInfos) {
         mContext = context;
         mMusicInfos = musicInfos;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
+        getSongIds();
     }
 
     @NonNull
@@ -49,7 +52,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
 
     @Override
     public void onBindViewHolder(@NonNull MusicHolder holder, final int position) {
-        MusicInfo musicInfo = mMusicInfos.get(position);
+        SongInfo musicInfo = mMusicInfos.get(position);
         holder.mMusicIndexView.setText(String.valueOf(position + 1));
         try {
             ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(musicInfo.getAlbumId()).toString(),
@@ -61,13 +64,17 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
             e.printStackTrace();
         }
         holder.mMusicNameView.setText(musicInfo.getTitle());
-        holder.mMusicArtistView.setText(FileUtil.formatFileSize(0, musicInfo.getSize()) + " " + musicInfo.getArtist() + " - " + musicInfo.getAlbumName());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(FileUtil.formatFileSize(0, musicInfo.getSize()));
+        stringBuilder.append(" ");
+        stringBuilder.append(musicInfo.getArtist());
+        stringBuilder.append("-");
+        stringBuilder.append(musicInfo.getAlbumName());
+        holder.mMusicArtistView.setText(stringBuilder);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, position);
-                }
+                MusicPlayer.playList(mSongIds, position, ListType.Song);
             }
         });
     }

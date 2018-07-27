@@ -69,7 +69,7 @@ public class MusicLibaryFragment extends BaseFragment {
         fragments.add(new PlayListFragment());
         fragments.add(new PlayListFragment());
         fragments.add(new PlayListFragment());
-        fragments.add(new PlayListFragment());
+        fragments.add(new MusicFragment());
         fragments.add(new PlayListFragment());
 
         String[] stringArray = getResources().getStringArray(R.array.music_type_array);

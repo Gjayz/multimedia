@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicManager;
-import com.gjayz.multimedia.music.bean.MusicInfo;
+import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.ui.adapter.MusicAdapter;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class PlayListFragment extends BaseFragment {
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerView;
-    private List<MusicInfo> mMusicList;
+    private List<SongInfo> mMusicList;
 
     @Override
     public int getLayoutId() {

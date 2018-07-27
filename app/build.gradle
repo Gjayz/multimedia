@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.gjayz.multimedia"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:percent:27.1.1'
+    implementation 'com.zhy:base-rvadapter:3.0.3'
 
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }

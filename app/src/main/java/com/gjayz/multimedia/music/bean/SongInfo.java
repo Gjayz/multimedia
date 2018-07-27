@@ -1,6 +1,6 @@
 package com.gjayz.multimedia.music.bean;
 
-public class MusicInfo {
+public class SongInfo {
 
     int id;
     String title;
@@ -12,11 +12,11 @@ public class MusicInfo {
     int duration;
     String path;
 
-    public MusicInfo() {
+    public SongInfo() {
     }
 
-    public MusicInfo(int id, String title, String displayName, String albumName,
-                     int albumId, String artist, long size, int duration, String path) {
+    public SongInfo(int id, String title, String displayName, String albumName,
+                    int albumId, String artist, long size, int duration, String path) {
         this.id = id;
         this.title = title;
         this.albumName = albumName;

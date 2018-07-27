@@ -22,7 +22,7 @@ import android.graphics.Bitmap;
 interface IMediaPlaybackService
 {
     void openFile(String path);
-    void open(in long [] list, int position);
+    void open(in long [] list, int position, int listType, long souceId);
     int getQueuePosition();
     boolean isPlaying();
     void stop();

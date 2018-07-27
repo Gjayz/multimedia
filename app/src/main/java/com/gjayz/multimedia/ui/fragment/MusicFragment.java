@@ -1,23 +1,24 @@
 package com.gjayz.multimedia.ui.fragment;
 
-import android.database.Cursor;
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.gjayz.multimedia.R;
-import com.gjayz.multimedia.music.data.MediaStoreHelper;
-import com.gjayz.multimedia.ui.adapter.MusicCursorAdapter;
+import com.gjayz.multimedia.music.MusicManager;
+import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.ui.adapter.AllSongAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 
 public class MusicFragment extends BaseFragment {
 
-    @BindView(R.id.listview)
-    ListView mListView;
-
-    private Cursor mCursor;
-    private AdapterView.OnItemClickListener onItemClickListener;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerview;
+    private ScannerSongsTask mScannerSongsTask;
 
     @Override
     public int getLayoutId() {
@@ -26,26 +27,32 @@ public class MusicFragment extends BaseFragment {
 
     @Override
     public void init() {
-        ScannerSongsTask scannerSongsTask = new ScannerSongsTask();
-        scannerSongsTask.execute();
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mScannerSongsTask = new ScannerSongsTask();
+        mScannerSongsTask.execute();
     }
 
-    private class ScannerSongsTask extends AsyncTask<Void, Void, Void> {
-
-        String orderStr;
+    @SuppressLint("StaticFieldLeak")
+    private class ScannerSongsTask extends AsyncTask<Void, Void, List<SongInfo>> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            mCursor = MediaStoreHelper.getAllSongsCursor(getContext(), orderStr);
-            return null;
+        protected List<SongInfo> doInBackground(Void... voids) {
+            List<SongInfo> musicList = MusicManager.getInstance(getActivity()).getMusicList();
+            return musicList;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-
-            MusicCursorAdapter musicCursorAdapter = new MusicCursorAdapter(getContext(), mCursor);
-            mListView.setAdapter(musicCursorAdapter);
-            mListView.setOnItemClickListener(onItemClickListener);
+        protected void onPostExecute(List<SongInfo> result) {
+            AllSongAdapter allSongAdapter = new AllSongAdapter(getContext(), result);
+            mRecyclerview.setAdapter(allSongAdapter);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        mScannerSongsTask.cancel(true);
+        mScannerSongsTask = null;
+        super.onDestroyView();
     }
 }
