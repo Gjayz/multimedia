@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gjayz.multimedia">
 
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -23,8 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.MusicPlayActivity" />
-        <activity android:name=".ui.activity.SettingsActivity" />
-        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.ToolBarActivity" />
 
         <service
             android:name=".music.service.MusicService"

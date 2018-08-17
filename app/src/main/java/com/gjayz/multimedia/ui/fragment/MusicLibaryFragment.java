@@ -67,10 +67,10 @@ public class MusicLibaryFragment extends BaseFragment {
     private void initData() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new PlayListFragment());
-        fragments.add(new PlayListFragment());
-        fragments.add(new PlayListFragment());
         fragments.add(new MusicFragment());
-        fragments.add(new PlayListFragment());
+        fragments.add(new MusicFragment());
+        fragments.add(new MusicFragment());
+        fragments.add(new MusicFragment());
 
         String[] stringArray = getResources().getStringArray(R.array.music_type_array);
         mMusicPageAdapter = new MusicPageAdapter(getFragmentManager(), stringArray, fragments);
@@ -84,7 +84,6 @@ public class MusicLibaryFragment extends BaseFragment {
         Activity activity = getActivity();
         if (activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) activity;
-
             mToolbar.setTitle(mTitle);
             mainActivity.setSupportActionBar(mToolbar);
 

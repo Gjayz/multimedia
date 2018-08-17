@@ -74,7 +74,7 @@ public class MusicPlayer {
             //正在播放当前列表的点击歌曲，直接返回
             if (position >= 0 && queuePosition == position && audioId == songIds[position]) {
                 long[] queue = sService.getQueue();
-                if (Arrays.equals(queue, songIds)) {
+                if (!Arrays.equals(queue, songIds)) {
                     sService.play();
                     return;
                 }
@@ -87,6 +87,20 @@ public class MusicPlayer {
             sService.open(songIds, position, listType.mType, -1);
             sService.play();
         } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void playOrPause() {
+        try {
+            if (sService != null) {
+                if (sService.isPlaying()) {
+                    sService.pause();
+                } else {
+                    sService.play();
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

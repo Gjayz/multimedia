@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strPersonalized">
+
+        <CheckBoxPreference
+            android:key="key_night_mode"
+            android:summary="@string/strNightModeSummary"
+            android:title="@string/strNightMode" />
+
+        <CheckBoxPreference
+            android:key="key_status_bar_color"
+            android:summary="@string/strStausBarColorSummary"
+            android:title="@string/strStausBarColor" />
+
+        <CheckBoxPreference
+            android:key="key_nav_bar_color"
+            android:summary="@string/strNavBarColorSummary"
+            android:title="@string/strNavBarColor" />
+
+    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
+</PreferenceScreen>

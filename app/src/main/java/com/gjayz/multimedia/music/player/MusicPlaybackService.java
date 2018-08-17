@@ -27,22 +27,23 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
 
     @Override
     public int getQueuePosition() throws RemoteException {
-        return 0;
+        return mMusicService.get().getQueuePosition();
     }
 
     @Override
     public boolean isPlaying() throws RemoteException {
-        return false;
+        return mMusicService.get().isPlaying();
     }
 
     @Override
     public void stop() throws RemoteException {
 
+        mMusicService.get().stop();
     }
 
     @Override
     public void pause() throws RemoteException {
-
+        mMusicService.get().pauseInternal();
     }
 
     @Override
@@ -52,77 +53,77 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
 
     @Override
     public void prev() throws RemoteException {
-
+        mMusicService.get().prev();
     }
 
     @Override
     public void next() throws RemoteException {
-
+        mMusicService.get().next();
     }
 
     @Override
     public long duration() throws RemoteException {
-        return 0;
+        return mMusicService.get().duration();
     }
 
     @Override
     public long position() throws RemoteException {
-        return 0;
+        return mMusicService.get().position();
     }
 
     @Override
     public long seek(long pos) throws RemoteException {
-        return 0;
+        return mMusicService.get().seek(pos);
     }
 
     @Override
     public String getTrackName() throws RemoteException {
-        return null;
+        return mMusicService.get().getTrackName();
     }
 
     @Override
     public String getAlbumName() throws RemoteException {
-        return null;
+        return  mMusicService.get().getAlbumName();
     }
 
     @Override
     public long getAlbumId() throws RemoteException {
-        return 0;
+        return  mMusicService.get().getAlbumId();
     }
 
     @Override
     public String getArtistName() throws RemoteException {
-        return null;
+        return  mMusicService.get().getArtistName();
     }
 
     @Override
     public long getArtistId() throws RemoteException {
-        return 0;
+        return  mMusicService.get().getArtistId();
     }
 
     @Override
     public void enqueue(long[] list, int action) throws RemoteException {
-
+        mMusicService.get().enqueue(list, action);
     }
 
     @Override
     public long[] getQueue() throws RemoteException {
-        return new long[0];
+        return  mMusicService.get().getQueue();
     }
 
     @Override
     public void moveQueueItem(int from, int to) throws RemoteException {
-
+        mMusicService.get().moveQueueItem(from, to);
     }
 
     @Override
     public void setQueuePosition(int index) throws RemoteException {
-
+        mMusicService.get().setQueuePosition(index);
     }
 
     @Override
     public String getPath() throws RemoteException {
-        return null;
+        return mMusicService.get().getPath();
     }
 
     @Override
@@ -132,37 +133,37 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
 
     @Override
     public void setShuffleMode(int shufflemode) throws RemoteException {
-
+        mMusicService.get().setShuffleMode(shufflemode);
     }
 
     @Override
     public int getShuffleMode() throws RemoteException {
-        return 0;
+        return mMusicService.get().getShuffleMode();
     }
 
     @Override
     public int removeTracks(int first, int last) throws RemoteException {
-        return 0;
+        return mMusicService.get().removeTracks(first, last);
     }
 
     @Override
     public int removeTrack(long id) throws RemoteException {
-        return 0;
+        return mMusicService.get().removeTracks(id);
     }
 
     @Override
     public void setRepeatMode(int repeatmode) throws RemoteException {
-
+        mMusicService.get().setRepeatMode(repeatmode);
     }
 
     @Override
     public int getRepeatMode() throws RemoteException {
-        return 0;
+        return mMusicService.get().getRepeatMode();
     }
 
     @Override
     public int getMediaMountedCount() throws RemoteException {
-        return 0;
+        return mMusicService.get().getMediaMountedCount();
     }
 
     @Override

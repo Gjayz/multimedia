@@ -187,4 +187,13 @@
     <string name="strSoftVersion">软件版本</string>
     <string name="strDeviceInfo">设备信息</string>
     <string name="strNetwork">网络诊断</string>
+
+
+    <string name="strPersonalized">个性化</string>
+    <string name="strNightMode">夜间模式</string>
+    <string name="strNightModeSummary">夜间模式应用到整个应用</string>
+    <string name="strStausBarColor">状态栏着色</string>
+    <string name="strStausBarColorSummary">切换状态栏的着色状态</string>
+    <string name="strNavBarColor">导航栏着色</string>
+    <string name="strNavBarColorSummary">切换导航栏的着色状态</string>
 </resources>

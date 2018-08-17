@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +20,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
+import com.gjayz.multimedia.music.player.MusicPlayer;
+import com.gjayz.multimedia.music.service.MusicService;
 import com.gjayz.multimedia.permission.PermissionCallback;
 import com.gjayz.multimedia.swipeback.SwipeBackHelper;
 import com.gjayz.multimedia.ui.fragment.EnjoyMusicFragment;
 import com.gjayz.multimedia.ui.fragment.MusicLibaryFragment;
 import com.gjayz.multimedia.permission.ZXPermission;
+import com.gjayz.multimedia.utils.DeviceUtils;
+import com.gjayz.multimedia.utils.ZXUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,6 +40,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private static final String TAG_ENJOY = "TAG_ENJOY";
     private static final String TAG_MUSIC_LIST = "TAG_MUSIC_LIST";
+    private static final String TAG = "MainActivity";
 
     @BindView(R.id.music_containter_layout)
     FrameLayout mFrameLayout;
@@ -52,6 +60,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     @BindView(R.id.music_play_layout)
     View mMusicPlayLayout;
 
+    TextView musicNameView;
+    TextView musicArtistView;
+    ImageView musicAlbumView;
+
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
     }
@@ -63,6 +75,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void initActivity() {
+        View headerView = mNavigationView.getHeaderView(0);
+        musicNameView = headerView.findViewById(R.id.header_music_name_view);
+        musicArtistView = headerView.findViewById(R.id.header_music_artist_view);
+        musicAlbumView = headerView.findViewById(R.id.header_music_album_view);
+
+        mMusicPlayView.setSelected(false);
+
         mNavigationView.getMenu().getItem(1).setChecked(true);
         mNavigationView.setNavigationItemSelectedListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -127,12 +146,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.action_setting:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(ToolBarActivity.newIntent(this, getString(R.string.strSettings), ToolBarActivity.TYPE_SETTINGS));
                 break;
             case R.id.action_about:
-                Intent intent1 = new Intent(this, AboutActivity.class);
-                startActivity(intent1);
+                startActivity(ToolBarActivity.newIntent(this, getString(R.string.strAbout), ToolBarActivity.TYPE_ABOUT));
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -170,12 +187,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    @OnClick({R.id.music_play_layout})
+    @OnClick({R.id.music_play_layout, R.id.music_play_view})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.music_play_layout:
                 Intent intent = new Intent(this, MusicPlayActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.music_play_view:
+                MusicPlayer.playOrPause();
                 break;
         }
     }
@@ -191,4 +211,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         }
     };
+
+    @Override
+    public void onMetaChanged(long id, String title, String artist, int albumId) {
+        setDetailsToHeader(title, artist, albumId);
+        showBottomPlayLayout(title, artist, albumId);
+    }
+
+    @Override
+    public void onPlayStatusChanged(int status) {
+        switch (status){
+            case 0:
+                mMusicPlayView.setSelected(false);
+                break;
+            case 1:
+                mMusicPlayView.setSelected(true);
+                break;
+            case 2:
+                mMusicPlayView.setSelected(false);
+                break;
+            case 3:
+                mMusicPlayView.setSelected(false);
+                break;
+        }
+    }
+
+    public void setDetailsToHeader(String title, String artist, int albumId) {
+        musicNameView.setText(title);
+        musicArtistView.setText(artist);
+        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(albumId).toString(),
+                musicAlbumView, new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .resetViewBeforeLoading(true)
+                        .build());
+    }
+
+    private void showBottomPlayLayout(String title, String artist, int albumId) {
+        mMusicPlayLayout.setVisibility(View.VISIBLE);
+        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(albumId).toString(),
+                mMusicIconView, new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .resetViewBeforeLoading(true)
+                        .build());
+        mMusicNameView.setText(title);
+        mMusicArtistView.setText(artist);
+//        mMusicPlayView.setSelected(true);
+    }
 }

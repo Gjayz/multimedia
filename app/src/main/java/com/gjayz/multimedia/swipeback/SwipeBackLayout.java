@@ -245,7 +245,7 @@ public class SwipeBackLayout extends FrameLayout {
         try {
             return mDragHelper.shouldInterceptTouchEvent(event);
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
@@ -258,7 +258,7 @@ public class SwipeBackLayout extends FrameLayout {
         try {
             mDragHelper.processTouchEvent(event);
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
         return true;

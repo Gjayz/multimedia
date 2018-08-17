@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white"
+        app:titleTextAppearance="@style/toolbarAppearance"/>
 
     <TextView
         android:id="@+id/music_type_info"

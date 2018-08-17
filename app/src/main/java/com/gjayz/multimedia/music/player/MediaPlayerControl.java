@@ -5,9 +5,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+
+import com.gjayz.multimedia.music.service.MusicService;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -20,11 +21,13 @@ public class MediaPlayerControl implements MediaPlayer.OnErrorListener, MediaPla
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private MediaPlayer mNextMediaPlayer;
     private WeakReference<Context> mContextWeakReference;
+    private WeakReference<MusicService.MusicMsgHandler> msgHandlerWeakReference;
     private boolean isInitPlayer;
     private String mNextPlayPath;
 
-    public MediaPlayerControl(Context context) {
+    public MediaPlayerControl(Context context, MusicService.MusicMsgHandler musicMsgHandler) {
         mContextWeakReference = new WeakReference<>(context);
+        msgHandlerWeakReference = new WeakReference<>(musicMsgHandler);
     }
 
     public void setDataSource(String path) {
@@ -70,8 +73,7 @@ public class MediaPlayerControl implements MediaPlayer.OnErrorListener, MediaPla
             try {
                 mMediaPlayer.setNextMediaPlayer(null);
             } catch (Exception e) {
-
-
+                e.printStackTrace();
             }
 
             if (mNextMediaPlayer != null) {
@@ -132,6 +134,7 @@ public class MediaPlayerControl implements MediaPlayer.OnErrorListener, MediaPla
             mMediaPlayer = mNextMediaPlayer;
             mNextMediaPlayer = null;
             mNextPlayPath = null;
+            msgHandlerWeakReference.get().sendEmptyMessage(MusicService.MusicMsgHandler.MSG_GOTO_NEXT_TRACK);
         } else {
             //当前播放列表播放结束
         }

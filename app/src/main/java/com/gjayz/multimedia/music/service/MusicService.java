@@ -1,34 +1,77 @@
 package com.gjayz.multimedia.music.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
-import android.os.RemoteException;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.gjayz.multimedia.BuildConfig;
 import com.gjayz.multimedia.music.bean.MusicPlaybackTrack;
+import com.gjayz.multimedia.music.data.MusicDbHelper;
 import com.gjayz.multimedia.music.player.ListType;
 import com.gjayz.multimedia.music.player.MediaPlayerControl;
 import com.gjayz.multimedia.music.player.MusicPlaybackService;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MusicService extends Service {
 
     private static final String TAG = "MusicService";
 
+    public static final String PLAYSTATE_CHANGED = "com.gjayz.multimedia.playstatechanged";
+    public static final String POSITION_CHANGED = "com.gjayz.multimedia.positionchanged";
+    public static final String META_CHANGED = "com.gjayz.multimedia.metachanged";
+    public static final String QUEUE_CHANGED = "com.gjayz.multimedia.queuechanged";
+    public static final String PLAYLIST_CHANGED = "com.gjayz.multimedia.playlistchanged";
+    public static final String REPEATMODE_CHANGED = "com.gjayz.multimedia.repeatmodechanged";
+    public static final String SHUFFLEMODE_CHANGED = "com.gjayz.multimedia.shufflemodechanged";
+    public static final String TRACK_ERROR = "com.gjayz.multimedia.trackerror";
+
+    public static final String KEY_PLAY_STATUS = "key_play_status";
+    private PlayStatus mStatus;
+
+    public enum PlayStatus {
+        UNKNOWN(0),
+        PLAY(1),
+        PAUSE(2),
+        STOP(3);
+
+        public int status;
+
+        PlayStatus(int status) {
+            this.status = status;
+        }
+
+        public static PlayStatus getTypeById(int status) {
+            for (PlayStatus palyStatus : values()) {
+                if (palyStatus.status == status) {
+                    return palyStatus;
+                }
+            }
+
+            throw new IllegalArgumentException("Unrecognized id: " + status);
+        }
+    }
+
     private MediaPlayerControl mMediaPlayerControl;
     private AudioManager mAudioManager;
 
-    private int mCurPos;
+    public int mCurPos;
     private int mNextPos;
+    private String mFileToPlay;
+    private int mOpenFailedCounter;
+    public MusicDbHelper mMusicDbHelper;
 
     private ArrayList<MusicPlaybackTrack> mPlaylist = new ArrayList<MusicPlaybackTrack>(100);
 
@@ -45,6 +88,13 @@ public class MusicService extends Service {
             }
         }
     };
+
+    private int mMediaMountedCount;
+    private int mRepeatMode;
+    private int mShuffleMode;
+    private int mQueuePosition;
+    private long[] mQueue;
+    private MusicMsgHandler mMusicMsgHandler;
 
     public int getAudioSessionId() {
         int audioSenssionId;
@@ -68,11 +118,17 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        mMusicMsgHandler = new MusicMsgHandler(this);
         initMediaPlayer();
+        createDbHelper();
     }
 
     private void initMediaPlayer() {
-        mMediaPlayerControl = new MediaPlayerControl(this);
+        mMediaPlayerControl = new MediaPlayerControl(this, mMusicMsgHandler);
+    }
+
+    private void createDbHelper() {
+        mMusicDbHelper = new MusicDbHelper(getContentResolver());
     }
 
     public void playInternal() {
@@ -101,13 +157,18 @@ public class MusicService extends Service {
 
         if (mMediaPlayerControl.isInitPlayer()) {
             mMediaPlayerControl.start();
+            mStatus = PlayStatus.PLAY;
+
+            notifyChange(META_CHANGED);
+            notifyChange(PLAYSTATE_CHANGED);
         }
     }
 
-
-    private void pauseInternal() {
+    public void pauseInternal() {
         if (mMediaPlayerControl != null && mMediaPlayerControl.isPlaying()) {
             mMediaPlayerControl.pause();
+            mStatus = PlayStatus.PAUSE;
+            notifyChange(PLAYSTATE_CHANGED);
         }
     }
 
@@ -129,22 +190,22 @@ public class MusicService extends Service {
 
     }
 
-    private void setNextTrack() {
-        setNextTrack(getNextPosition(false));
+    public void setNextTrack() {
+        setNextTrack(getNextPosition());
     }
 
     private void setNextTrack(int position) {
         mNextPos = position;
         if (BuildConfig.DEBUG) Log.d(TAG, "setNextTrack: next play position = " + mNextPos);
         if (mNextPos >= 0 && mPlaylist != null && mNextPos < mPlaylist.size()) {
-            final long id = mPlaylist.get(mNextPos).mId;
+            long id = mPlaylist.get(mNextPos).mId;
             mMediaPlayerControl.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
         } else {
             mMediaPlayerControl.setNextDataSource(null);
         }
     }
 
-    private int getNextPosition(boolean b) {
+    private int getNextPosition() {
         return mCurPos + 1;
     }
 
@@ -157,8 +218,51 @@ public class MusicService extends Service {
         mAudioManager.abandonAudioFocus(null);
     }
 
-    public void openFile(String path) {
+    public boolean openFile(String path) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "openFile: path = " + path);
+        synchronized (this) {
+            if (TextUtils.isEmpty(path)) {
+                return false;
+            }
 
+            Uri uri = Uri.parse(path);
+            boolean shouldAddToPlaylist = true;
+            long id = -1;
+            try {
+                id = Long.parseLong(uri.getLastPathSegment());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (id != -1 && path.startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())) {
+                mMusicDbHelper.updateCursor(uri);
+            } else if (id != -1 && path.startsWith(MediaStore.Files.getContentUri("external").toString())) {
+                mMusicDbHelper.updateCursor(id);
+            } else {
+                String where = MediaStore.Audio.Media.DATA + "=?";
+                String[] selectionArgs = new String[]{path};
+                mMusicDbHelper.updateCursor(where, selectionArgs);
+            }
+
+            try {
+                if (mMusicDbHelper.isCursorOpen() && shouldAddToPlaylist) {
+//                    mPlaylist.add(new MusicPlaybackTrack(mMusicDbHelper.getMusicId(), -1, ListType.PlayList, -1));
+//                    mCurPos = 0;
+                }
+            } catch (final UnsupportedOperationException ex) {
+                ex.printStackTrace();
+            }
+
+            mFileToPlay = path;
+            mMediaPlayerControl.setDataSource(mFileToPlay);
+            if (mMediaPlayerControl.isInitPlayer()) {
+                mOpenFailedCounter = 0;
+                return true;
+            }
+
+            stopInternal();
+        }
+        return false;
     }
 
     /**
@@ -207,6 +311,20 @@ public class MusicService extends Service {
             if (mPlaylist.size() == 0) {
                 return;
             }
+
+            mMusicDbHelper.updateCursor(mPlaylist.get(mCurPos).mId);
+            while (true) {
+                if (openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
+                        + mMusicDbHelper.getMusicId())) {
+                    break;
+                }
+
+                mMusicDbHelper.closeCursor();
+
+                if (openNext) {
+                    setNextTrack();
+                }
+            }
         }
     }
 
@@ -231,7 +349,7 @@ public class MusicService extends Service {
         mPlaylist.addAll(position, addMusicList);
 
         if (mPlaylist.size() == 0) {
-
+            mMusicDbHelper.closeCursor();
         }
     }
 
@@ -262,5 +380,160 @@ public class MusicService extends Service {
             return mPlaylist.get(position);
         }
         return null;
+    }
+
+    public String getTrackName() {
+        return mMusicDbHelper.getTrackName();
+    }
+
+    public void prev() {
+    }
+
+    public void next() {
+    }
+
+    public long duration() {
+        return mMusicDbHelper.duration();
+    }
+
+    public long position() {
+        return mCurPos;
+    }
+
+    public long seek(long pos) {
+        return pos;
+    }
+
+    public String getAlbumName() {
+        return mMusicDbHelper.getAlbumName();
+    }
+
+    public int getAlbumId() {
+        return mMusicDbHelper.getAlbumId();
+    }
+
+    public String getArtistName() {
+        return mMusicDbHelper.getArtistName();
+    }
+
+    public long getArtistId() {
+        return mMusicDbHelper.getArtistId();
+    }
+
+    public void enqueue(long[] list, int action) {
+
+    }
+
+    public int getMediaMountedCount() {
+        return mMediaMountedCount;
+    }
+
+    public int getRepeatMode() {
+        return mRepeatMode;
+    }
+
+    public void setRepeatMode(int repeatMode) {
+        mRepeatMode = repeatMode;
+    }
+
+    public int removeTracks(long id) {
+        return 0;
+    }
+
+    public int removeTracks(int first, int last) {
+        return 0;
+    }
+
+    public int getShuffleMode() {
+        return mShuffleMode;
+    }
+
+    public void setShuffleMode(int shuffleMode) {
+        mShuffleMode = shuffleMode;
+    }
+
+    public String getPath() {
+        return mMusicDbHelper.getPath();
+    }
+
+    public void moveQueueItem(int from, int to) {
+
+    }
+
+    public void setQueuePosition(int queuePosition) {
+        mQueuePosition = queuePosition;
+    }
+
+    public long[] getQueue() {
+        return mQueue;
+    }
+
+    public int getQueuePosition() {
+        return mQueuePosition;
+    }
+
+    public boolean isPlaying() {
+        return isPlayingInternal();
+    }
+
+    public void stop() {
+        if (mMediaPlayerControl != null){
+            mMediaPlayerControl.stop();
+            mStatus = PlayStatus.STOP;
+
+            notifyChange(PLAYSTATE_CHANGED);
+        }
+    }
+
+    public void notifyChange(String action) {
+        Intent intent = new Intent(action);
+        switch (action) {
+            case META_CHANGED:
+                intent.putExtra(MediaStore.Audio.Media._ID, getAudioId());
+                intent.putExtra(MediaStore.Audio.Media.TITLE, getTrackName());
+                intent.putExtra(MediaStore.Audio.Media.ARTIST, getArtistName());
+                intent.putExtra(MediaStore.Audio.Media.ARTIST_ID, getArtistId());
+                intent.putExtra(MediaStore.Audio.Media.ALBUM, getAlbumName());
+                intent.putExtra(MediaStore.Audio.Media.ALBUM_ID, getAlbumId());
+                break;
+            case PLAYSTATE_CHANGED:
+                intent.putExtra(KEY_PLAY_STATUS, mStatus.status);
+                break;
+        }
+        sendStickyBroadcast(intent);
+    }
+
+    public void setAndRecordPlayPos() {
+        mCurPos = mNextPos;
+    }
+
+    @SuppressLint("HandlerLeak")
+    public class MusicMsgHandler extends Handler {
+
+        public static final int MSG_GOTO_NEXT_TRACK = 1;
+
+        private WeakReference<MusicService> mServiceWeakReference;
+
+        public MusicMsgHandler(MusicService musicService) {
+            mServiceWeakReference = new WeakReference<>(musicService);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_GOTO_NEXT_TRACK:
+                    MusicService service = mServiceWeakReference.get();
+                    service.setAndRecordPlayPos();
+                    service.setNextTrack();
+                    if (service.mMusicDbHelper != null) {
+                        if (service.mMusicDbHelper.isCursorOpen()) {
+                            service.mMusicDbHelper.closeCursor();
+                        }
+                        service.mMusicDbHelper.updateCursor(service.mPlaylist.get(service.mCurPos).mId);
+                    }
+                    service.notifyChange(MusicService.META_CHANGED);
+                    break;
+            }
+        }
     }
 }

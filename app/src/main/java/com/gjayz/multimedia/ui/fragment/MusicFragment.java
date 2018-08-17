@@ -38,8 +38,7 @@ public class MusicFragment extends BaseFragment {
 
         @Override
         protected List<SongInfo> doInBackground(Void... voids) {
-            List<SongInfo> musicList = MusicManager.getInstance(getActivity()).getMusicList();
-            return musicList;
+            return MusicManager.getInstance(getActivity()).getMusicList();
         }
 
         @Override

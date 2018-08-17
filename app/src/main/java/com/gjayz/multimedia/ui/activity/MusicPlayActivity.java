@@ -1,7 +1,6 @@
 package com.gjayz.multimedia.ui.activity;
 
 import com.gjayz.multimedia.R;
-import com.gjayz.multimedia.utils.StatusBarUtils;
 
 public class MusicPlayActivity extends BaseActivity {
 
@@ -12,15 +11,6 @@ public class MusicPlayActivity extends BaseActivity {
 
     @Override
     public void initActivity() {
-    }
 
-    public void adjustStatusBar() {
-        StatusBarUtils.setTranslucentStatus(this, R.color.transparent);
-        StatusBarUtils.needStatusBarPadding(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }
