@@ -19,7 +19,7 @@ import butterknife.BindView;
  * Use the {@link EnjoyMusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EnjoyMusicFragment extends BaseFragment  {
+public class EnjoyMusicFragment extends com.gjayz.multimedia.ui.fragment.v4.BaseFragment  {
 
     private static final String ARG_TITLE = "ARG_TITLE";
 

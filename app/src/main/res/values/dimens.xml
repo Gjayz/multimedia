@@ -3,5 +3,8 @@
     <dimen name="nav_siger_name_textsize">14sp</dimen>
     <dimen name="nav_music_name_textsize">14sp</dimen>
 
-    <dimen name="music_playing_bottom_pading">15dp</dimen>
+    <dimen name="music_playing_bottom_pading">12dp</dimen>
+    <dimen name="test_padding">5dp</dimen>
+    <dimen name="test_text_padding">8dp</dimen>
+    <dimen name="test_bg_corners">5dp</dimen>
 </resources>

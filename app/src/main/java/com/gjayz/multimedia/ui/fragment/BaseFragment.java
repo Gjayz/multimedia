@@ -1,17 +1,29 @@
 package com.gjayz.multimedia.ui.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gjayz.multimedia.net.base.BaseBean;
+import com.gjayz.multimedia.net.base.IView;
+import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements LifecycleProvider<FragmentEvent>, IView<BaseBean> {
 
     protected View mRootView;
     protected Activity mContext;
@@ -40,8 +52,9 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         mUnbinder.unbind();
+        lifecycleSubject.onNext(FragmentEvent.DESTROY_VIEW);
+        super.onDestroyView();
     }
 
     /**
@@ -81,5 +94,53 @@ public abstract class BaseFragment extends Fragment {
             return true;
         }
         return false;
+    }
+
+    private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final Observable<FragmentEvent> lifecycle() {
+        return lifecycleSubject.hide();
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
+        return RxLifecycleAndroid.bindFragment(lifecycleSubject);
+    }
+
+    @Override
+    public void showInfo(String msg) {
+
+    }
+
+    @Override
+    public void showInfo(int msg) {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showData(BaseBean baseBean) {
+
+    }
+
+    @Override
+    public void showError(int errCode, String errMsg) {
+
     }
 }

@@ -6,34 +6,46 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Camera;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.gjayz.multimedia.music.MusicStateListener;
 import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.music.service.MusicService;
+import com.gjayz.multimedia.net.base.BaseBean;
+import com.gjayz.multimedia.net.base.IView;
 import com.gjayz.multimedia.swipeback.SwipeBackHelper;
+import com.gjayz.multimedia.swipeback.SwipeBackPage;
+import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
-public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection, MusicStateListener{
+public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection,
+        MusicStateListener, LifecycleProvider<ActivityEvent>, IView<BaseBean> {
 
     private MusicPlayer.ServiceToken mToken;
     private MusicStatsCallbackReceiver mStatsCallbackReceiver;
+    protected SwipeBackPage mSwipeBackPage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
-        SwipeBackHelper.getCurrentPage(this)
+        mSwipeBackPage = SwipeBackHelper.getCurrentPage(this)
                 .setSwipeBackEnable(true)
                 .setSwipeSensitivity(0.5f)
                 .setSwipeRelateEnable(true)
@@ -68,6 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
         SwipeBackHelper.onDestroy(this);
         MusicPlayer.unbindFromService(mToken);
         unRegisterReceiver();
+        lifecycleSubject.onNext(ActivityEvent.DESTROY);
         super.onDestroy();
     }
 
@@ -105,7 +118,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
 
         private WeakReference<MusicStateListener> mWeakReference;
 
-        public MusicStatsCallbackReceiver(MusicStateListener musicStateListener){
+        public MusicStatsCallbackReceiver(MusicStateListener musicStateListener) {
             super();
             mWeakReference = new WeakReference<>(musicStateListener);
         }
@@ -165,5 +178,52 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
     @Override
     public void onPlayStatusChanged(int status) {
 
+    }
+
+    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final Observable<ActivityEvent> lifecycle() {
+        return lifecycleSubject.hide();
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
+        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    public void showInfo(String msg) {
+
+    }
+
+    @Override
+    public void showInfo(int msg) {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showData(BaseBean baseBean) {
+
+    }
+
+    @Override
+    public void showError(int errCode, String errMsg) {
     }
 }

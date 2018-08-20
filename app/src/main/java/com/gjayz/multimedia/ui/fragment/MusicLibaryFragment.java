@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 
-public class MusicLibaryFragment extends BaseFragment {
+public class MusicLibaryFragment extends com.gjayz.multimedia.ui.fragment.v4.BaseFragment {
 
     private static final String ARG_TITLE = "ARG_TITLE";
 

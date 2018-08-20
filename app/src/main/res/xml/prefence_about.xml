@@ -5,16 +5,15 @@
 
         <Preference
             android:key="key_about_author"
-            android:summary="@string/strAuthorInfo"
-            android:title="@string/strAboutAuthor" />
-
-    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
-
-    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strSoft">
+            android:title="@string/strAuthorInfo" />
 
         <Preference
             android:key="key_soft_version"
             android:title="@string/strSoftVersion" />
+
+    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
+
+    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strSoft">
 
         <Preference
             android:key="key_device_info"
@@ -23,6 +22,10 @@
         <Preference
             android:key="key_network"
             android:title="@string/strNetwork" />
+
+        <Preference
+            android:key="key_test"
+            android:title="@string/strTest" />
 
     </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
 

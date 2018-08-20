@@ -105,6 +105,17 @@ public class MusicPlayer {
         }
     }
 
+    public static long[] getPlayList() {
+        try {
+            if (sService != null) {
+                return sService.getQueue();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static final class ServiceToken {
         public ContextWrapper mWrappedContext;
 

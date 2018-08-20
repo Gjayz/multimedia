@@ -43,7 +43,7 @@ public class MusicManager {
                         continue;
                     }
 
-                    int id = cusor.getInt(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                    long id = cusor.getLong(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                     String title = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
                     String displayName = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                     String album = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));

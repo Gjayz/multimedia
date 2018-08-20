@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/test_padding">
+
+        <TextView
+            android:id="@+id/start_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/test_text_bg_selector"
+            android:enabled="false"
+            android:padding="@dimen/test_text_padding"
+            android:text="@string/strStartTest"
+            android:textColor="@color/test_textcolor_selector" />
+
+        <TextView
+            android:id="@+id/copy_test_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/test_padding"
+            android:layout_marginStart="@dimen/test_padding"
+            android:background="@drawable/test_text_bg_selector"
+            android:enabled="false"
+            android:padding="@dimen/test_text_padding"
+            android:text="@string/strCopyTestResult"
+            android:textColor="@color/test_textcolor_selector" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tips_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/test_padding"
+        android:layout_marginStart="@dimen/test_padding" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

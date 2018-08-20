@@ -2,7 +2,7 @@ package com.gjayz.multimedia.music.bean;
 
 public class SongInfo {
 
-    int id;
+    long id;
     String title;
     String displayName;
     String albumName;
@@ -15,7 +15,7 @@ public class SongInfo {
     public SongInfo() {
     }
 
-    public SongInfo(int id, String title, String displayName, String albumName,
+    public SongInfo(long id, String title, String displayName, String albumName,
                     int albumId, String artist, long size, int duration, String path) {
         this.id = id;
         this.title = title;
@@ -76,7 +76,7 @@ public class SongInfo {
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

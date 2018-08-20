@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.ui.fragment.AboutFragment;
 import com.gjayz.multimedia.ui.fragment.DeviceInfoFragment;
+import com.gjayz.multimedia.ui.fragment.NetFragment;
 import com.gjayz.multimedia.ui.fragment.SettingsFragment;
+import com.gjayz.multimedia.ui.fragment.TestFragment;
 
 public class ToolBarActivity extends BaseActivity {
 
@@ -20,6 +22,7 @@ public class ToolBarActivity extends BaseActivity {
     public static final int TYPE_DEVICEINFO = 1;
     public static final int TYPE_NET = 2;
     public static final int TYPE_SETTINGS = 3;
+    public static final int TYPE_TEST = 4;
 
     private int mType;
 
@@ -42,9 +45,15 @@ public class ToolBarActivity extends BaseActivity {
         initFragment();
     }
 
-    private void initFragment(){
+    private void initFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         switch (mType) {
+            case TYPE_SETTINGS:
+                SettingsFragment settingsFragment = SettingsFragment.newInstance();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.about_framelayout, settingsFragment)
+                        .commit();
+                break;
             case TYPE_ABOUT:
                 AboutFragment aboutFragment = AboutFragment.newInstance();
                 fragmentManager.beginTransaction()
@@ -57,10 +66,16 @@ public class ToolBarActivity extends BaseActivity {
                         .replace(R.id.about_framelayout, deviceInfoFragment)
                         .commit();
                 break;
-            case TYPE_SETTINGS:
-                SettingsFragment settingsFragment = SettingsFragment.newInstance();
+            case TYPE_NET:
+                NetFragment netFragment = NetFragment.newInstance();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.about_framelayout, settingsFragment)
+                        .replace(R.id.about_framelayout, netFragment)
+                        .commit();
+                break;
+            case TYPE_TEST:
+                TestFragment testFragment = TestFragment.newInstance();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.about_framelayout, testFragment)
                         .commit();
                 break;
         }
@@ -78,7 +93,7 @@ public class ToolBarActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static Intent newIntent(Context context, String title, int tpye){
+    public static Intent newIntent(Context context, String title, int tpye) {
         Intent intent = new Intent(context, ToolBarActivity.class);
         intent.putExtra(KEY_TITLE, title);
         intent.putExtra(KEY_TYPE, tpye);

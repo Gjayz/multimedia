@@ -14,7 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MusicFragment extends BaseFragment {
+public class MusicFragment extends com.gjayz.multimedia.ui.fragment.v4.BaseFragment {
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;

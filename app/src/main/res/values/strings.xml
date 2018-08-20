@@ -196,4 +196,7 @@
     <string name="strStausBarColorSummary">切换状态栏的着色状态</string>
     <string name="strNavBarColor">导航栏着色</string>
     <string name="strNavBarColorSummary">切换导航栏的着色状态</string>
+    <string name="strTest">测试</string>
+    <string name="strStartTest">开始测试</string>
+    <string name="strCopyTestResult">复制测试结果</string>
 </resources>

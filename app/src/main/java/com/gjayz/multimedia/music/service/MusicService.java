@@ -82,6 +82,9 @@ public class MusicService extends Service {
                 case AudioManager.AUDIOFOCUS_GAIN:
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
+                    if (isPlaying()){
+                        pauseInternal();
+                    }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     break;
@@ -93,7 +96,6 @@ public class MusicService extends Service {
     private int mRepeatMode;
     private int mShuffleMode;
     private int mQueuePosition;
-    private long[] mQueue;
     private MusicMsgHandler mMusicMsgHandler;
 
     public int getAudioSessionId() {
@@ -465,7 +467,15 @@ public class MusicService extends Service {
     }
 
     public long[] getQueue() {
-        return mQueue;
+        if (mPlaylist != null){
+            long[] songs = new long[mPlaylist.size()];
+            for (int i = 0; i < mPlaylist.size(); i ++) {
+                songs[i] = mPlaylist.get(i).mId;
+            }
+            return songs;
+        }else {
+            return null;
+        }
     }
 
     public int getQueuePosition() {
