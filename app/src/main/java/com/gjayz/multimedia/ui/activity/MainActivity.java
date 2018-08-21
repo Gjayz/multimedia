@@ -2,6 +2,7 @@ package com.gjayz.multimedia.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -11,23 +12,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.player.MusicPlayer;
-import com.gjayz.multimedia.music.service.MusicService;
 import com.gjayz.multimedia.permission.PermissionCallback;
 import com.gjayz.multimedia.swipeback.SwipeBackHelper;
 import com.gjayz.multimedia.ui.fragment.EnjoyMusicFragment;
 import com.gjayz.multimedia.ui.fragment.MusicLibaryFragment;
 import com.gjayz.multimedia.permission.ZXPermission;
-import com.gjayz.multimedia.utils.DeviceUtils;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -253,6 +252,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                         .build());
         mMusicNameView.setText(title);
         mMusicArtistView.setText(artist);
-//        mMusicPlayView.setSelected(true);
     }
 }

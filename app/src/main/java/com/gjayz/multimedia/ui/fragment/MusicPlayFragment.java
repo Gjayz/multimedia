@@ -3,6 +3,7 @@ package com.gjayz.multimedia.ui.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicPlayCursorHelp;
@@ -23,6 +24,12 @@ public class MusicPlayFragment extends BaseFragment {
 
     @BindView(R.id.music_album_iv)
     ImageView mAlbumView;
+    @BindView(R.id.music_album_small_iv)
+    ImageView mSmallAlbumView;
+    @BindView(R.id.music_name_view)
+    TextView mNameView;
+    @BindView(R.id.music_singer_view)
+    TextView mSingerView;
     private SongInfo mSongInfo;
 
     public static MusicPlayFragment createInstance(long id) {
@@ -48,10 +55,16 @@ public class MusicPlayFragment extends BaseFragment {
 
         mSongInfo = MusicPlayCursorHelp.getSongInfo(getActivity(), mId);
         if (mSongInfo != null) {
-            ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mSongInfo.getAlbumId()).toString(),
-                    mAlbumView, new DisplayImageOptions.Builder().cacheInMemory(true)
+            mNameView.setText(mSongInfo.getTitle());
+            mSingerView.setText(mSongInfo.getArtist());
+            String path = ZXUtils.getAlbumArtUri(mSongInfo.getAlbumId()).toString();
+            ImageLoader.getInstance().displayImage(path,mAlbumView, new DisplayImageOptions.Builder().cacheInMemory(true)
                             .showImageOnLoading(R.drawable.ic_empty_music2)
                             .resetViewBeforeLoading(true).build());
+
+            ImageLoader.getInstance().displayImage(path,mSmallAlbumView, new DisplayImageOptions.Builder().cacheInMemory(true)
+                    .showImageOnLoading(R.drawable.ic_empty_music2)
+                    .resetViewBeforeLoading(true).build());
         }
     }
 }

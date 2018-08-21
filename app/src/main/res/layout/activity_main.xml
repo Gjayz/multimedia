@@ -18,8 +18,7 @@
             android:layout_weight="1"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <include
-            layout="@layout/music_bottom_play_layout" />
+        <include layout="@layout/music_bottom_play_layout" />
 
     </LinearLayout>
 

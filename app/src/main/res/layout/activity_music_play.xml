@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,54 +11,104 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white_transparent"
-        android:orientation="horizontal"
-        android:padding="@dimen/music_playing_bottom_pading">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@drawable/ic_thumbs_up_default" />
+        <SeekBar
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-20dp"
+            android:layout_marginRight="-20dp"
+            android:max="100"
+            android:progress="50" />
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/music_playing_bottom_pading"
-            android:layout_marginStart="@dimen/music_playing_bottom_pading"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@drawable/ic_rew_dark" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:orientation="horizontal"
+            android:padding="@dimen/music_playing_bottom_pading">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/music_playing_bottom_pading"
-            android:layout_marginStart="@dimen/music_playing_bottom_pading"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_fab_play_btn_selector" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_thumbs_up_default"
+                tools:targetApi="lollipop" />
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/music_playing_bottom_pading"
-            android:layout_marginStart="@dimen/music_playing_bottom_pading"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@drawable/ic_fwd_dark" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/music_playing_bottom_pading"
+                android:layout_marginStart="@dimen/music_playing_bottom_pading"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_rew_dark"
+                tools:targetApi="lollipop" />
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/music_playing_bottom_pading"
-            android:layout_marginStart="@dimen/music_playing_bottom_pading"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@drawable/ic_thumbs_down_default"  />
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/music_playing_bottom_pading"
+                android:layout_marginStart="@dimen/music_playing_bottom_pading"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_fab_play_btn_selector" />
 
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/music_playing_bottom_pading"
+                android:layout_marginStart="@dimen/music_playing_bottom_pading"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_fwd_dark"
+                tools:targetApi="lollipop" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/music_playing_bottom_pading"
+                android:layout_marginStart="@dimen/music_playing_bottom_pading"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_thumbs_down_default"
+                tools:targetApi="lollipop" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/operate_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_queue_selector" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_moreoverflow_large_selector" />
+    </LinearLayout>
+
+
 </RelativeLayout>

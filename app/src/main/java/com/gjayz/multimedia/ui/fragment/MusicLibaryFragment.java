@@ -35,6 +35,7 @@ public class MusicLibaryFragment extends com.gjayz.multimedia.ui.fragment.v4.Bas
     private String mTitle;
 
     public MusicLibaryFragment() {
+
     }
 
     public static MusicLibaryFragment newInstance(String title) {
@@ -65,12 +66,13 @@ public class MusicLibaryFragment extends com.gjayz.multimedia.ui.fragment.v4.Bas
     }
 
     private void initData() {
+        mViewPager.setOffscreenPageLimit(5);
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new PlayListFragment());
+        fragments.add(new ArtistFragment());
+        fragments.add(new AlbumFragment());
         fragments.add(new MusicFragment());
-        fragments.add(new MusicFragment());
-        fragments.add(new MusicFragment());
-        fragments.add(new MusicFragment());
+        fragments.add(new SchoolFragment());
 
         String[] stringArray = getResources().getStringArray(R.array.music_type_array);
         mMusicPageAdapter = new MusicPageAdapter(getFragmentManager(), stringArray, fragments);
