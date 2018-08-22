@@ -21,7 +21,7 @@
             android:id="@+id/music_album_small_iv"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:padding="@dimen/pading_8" />
+            android:padding="@dimen/padding_8" />
 
         <RelativeLayout
             android:layout_width="match_parent"

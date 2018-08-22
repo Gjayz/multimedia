@@ -199,4 +199,5 @@
     <string name="strTest">测试</string>
     <string name="strStartTest">开始测试</string>
     <string name="strCopyTestResult">复制测试结果</string>
+    <string name="strSearch">搜索</string>
 </resources>

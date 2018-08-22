@@ -7,7 +7,7 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/pading_5"
-        android:paddingRight="@dimen/pading_5"/>
+        android:paddingLeft="@dimen/padding_5"
+        android:paddingRight="@dimen/padding_5"/>
 
 </RelativeLayout>

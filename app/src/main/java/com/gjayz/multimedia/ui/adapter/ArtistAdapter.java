@@ -1,6 +1,7 @@
 package com.gjayz.multimedia.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.ArtistInfo;
+import com.gjayz.multimedia.ui.activity.ArtistActivity;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,16 +38,20 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        ArtistInfo artistInfo = mArtistInfoList.get(position);
+        final ArtistInfo artistInfo = mArtistInfoList.get(position);
         holder.artist_name_tv.setText(artistInfo.getArtist());
         List<Integer> album_ids = artistInfo.getAlbum_ids();
-        if (album_ids.size() > 0){
+        if (album_ids.size() > 0) {
             ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(album_ids.get(0)).toString(),
                     holder.artist_icon_iv, new DisplayImageOptions.Builder().cacheInMemory(true)
                             .resetViewBeforeLoading(true).build());
-        }else {
-
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.startActivity(ArtistActivity.newIntent(mContext, artistInfo.getArtist_id(), artistInfo.getArtist()));
+            }
+        });
     }
 
     @Override

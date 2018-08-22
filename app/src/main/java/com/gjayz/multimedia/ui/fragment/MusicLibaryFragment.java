@@ -34,9 +34,7 @@ public class MusicLibaryFragment extends com.gjayz.multimedia.ui.fragment.v4.Bas
     private MusicPageAdapter mMusicPageAdapter;
     private String mTitle;
 
-    public MusicLibaryFragment() {
-
-    }
+    public MusicLibaryFragment() {}
 
     public static MusicLibaryFragment newInstance(String title) {
         MusicLibaryFragment fragment = new MusicLibaryFragment();

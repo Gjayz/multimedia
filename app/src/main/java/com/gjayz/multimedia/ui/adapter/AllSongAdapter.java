@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.music.player.ListType;
+import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.utils.FileUtil;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -20,14 +22,26 @@ import java.util.List;
 
 public class AllSongAdapter extends BaseMusicAdapter {
 
-    private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<SongInfo> mSongs;
 
+    private long[] mSongIds;
+
+    private void  getSongIds(){
+        if (mSongs != null){
+            int size = mSongs.size();
+            mSongIds = new long[size];
+            for (int i = 0; i < size; i ++){
+                SongInfo songInfo = mSongs.get(i);
+                mSongIds[i] = songInfo.getId();
+            }
+        }
+    }
+
     public AllSongAdapter(Context context, List<SongInfo> songs) {
-        this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.mSongs = songs;
+        getSongIds();
     }
 
     @Override
@@ -43,7 +57,7 @@ public class AllSongAdapter extends BaseMusicAdapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         SongHolder songHolder = (SongHolder) holder;
 
         SongInfo songInfo = mSongs.get(position);
@@ -65,7 +79,12 @@ public class AllSongAdapter extends BaseMusicAdapter {
         stringBuilder.append(songInfo.getArtist());
         stringBuilder.append("-");
         stringBuilder.append(songInfo.getAlbumName());
-        songHolder.songInfoView.setText(stringBuilder);
+        songHolder.songInfoView.setText(stringBuilder);   holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicPlayer.playList(mSongIds, position, ListType.Song);
+            }
+        });
     }
 
     private static class SongHolder extends RecyclerView.ViewHolder {

@@ -3,7 +3,7 @@
     <dimen name="nav_siger_name_textsize">14sp</dimen>
     <dimen name="nav_music_name_textsize">14sp</dimen>
 
-    <dimen name="music_playing_bottom_pading">14dp</dimen>
+    <dimen name="music_playing_bottom_padding">14dp</dimen>
     <dimen name="test_padding">5dp</dimen>
     <dimen name="test_text_padding">8dp</dimen>
     <dimen name="test_bg_corners">5dp</dimen>
@@ -15,10 +15,10 @@
     <dimen name="textsize_mcro">12sp</dimen>
 
 
-    <dimen name="pading_mid">14dp</dimen>
+    <dimen name="padding_mid">14dp</dimen>
 
-    <dimen name="pading_3">3dp</dimen>
-    <dimen name="pading_5">5dp</dimen>
-    <dimen name="pading_8">8dp</dimen>
-    <dimen name="pading_20">20dp</dimen>
+    <dimen name="padding_3">3dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
 </resources>

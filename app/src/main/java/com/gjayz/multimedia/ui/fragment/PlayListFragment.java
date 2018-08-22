@@ -25,9 +25,9 @@ public class PlayListFragment extends com.gjayz.multimedia.ui.fragment.v4.BaseFr
 
     @Override
     public void init() {
-        mMusicList = MusicManager.getInstance(mContext).getMusicList();
-        MusicAdapter musicAdapter = new MusicAdapter(mContext, mMusicList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecyclerView.setAdapter(musicAdapter);
+//        mMusicList = MusicManager.getInstance(mContext).getMusicList();
+//        MusicAdapter musicAdapter = new MusicAdapter(mContext, mMusicList);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+//        mRecyclerView.setAdapter(musicAdapter);
     }
 }
