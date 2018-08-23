@@ -29,6 +29,9 @@
         <activity
             android:name=".ui.activity.ArtistActivity"
             android:theme="@style/AppTheme.TranslucentBG.TranslucentBar" />
+        <activity
+            android:name=".ui.activity.AlbumActivity"
+            android:theme="@style/AppTheme.TranslucentBG.TranslucentBar" />
 
         <service
             android:name=".music.service.MusicService"

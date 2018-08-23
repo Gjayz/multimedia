@@ -292,4 +292,38 @@ public class MusicManager {
         }
         return songInfo;
     }
+
+    public List<SongInfo> getAlbumMusicList(int albumId) {
+        List<SongInfo> result = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, PROJECT_SONG,
+                    MediaStore.Audio.Media.ALBUM_ID + "=?", new String[]{String.valueOf(albumId)}, null);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                    if (!FileUtil.isExist(filePath)) {
+                        continue;
+                    }
+                    long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                    String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                    String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+                    String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                    int albumId2 = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                    String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                    long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
+                    int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+                    result.add(new SongInfo(id, title, displayName, album, albumId, artist, size, duration, filePath));
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return result;
+    }
 }

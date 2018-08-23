@@ -200,4 +200,5 @@
     <string name="strStartTest">开始测试</string>
     <string name="strCopyTestResult">复制测试结果</string>
     <string name="strSearch">搜索</string>
+    <string name="strMusicLib">在我的乐库中</string>
 </resources>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.Album;
+import com.gjayz.multimedia.ui.activity.AlbumActivity;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,12 +37,18 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        Album album = mAlbumList.get(position);
+        final Album album = mAlbumList.get(position);
         holder.mAlbumNameView.setText(album.getAlbum());
         holder.mAlbumArtistView.setText(album.getArtist());
         ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(album.getAlbum_id()).toString(),
                 holder.mAlbumIconView, new DisplayImageOptions.Builder().cacheInMemory(true)
                         .resetViewBeforeLoading(true).build());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlbumActivity.newIntent(mContext, album.getAlbum_id(), album.getAlbum());
+            }
+        });
     }
 
     @Override
