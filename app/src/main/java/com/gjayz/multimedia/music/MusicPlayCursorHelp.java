@@ -28,11 +28,12 @@ public class MusicPlayCursorHelp {
                 String displayName = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                 String album = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                 int albumId = cusor.getInt(cusor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                int track = cusor.getInt(cusor.getColumnIndex(MediaStore.Audio.Media.TRACK));
                 String artist = cusor.getString(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                 long size = cusor.getLong(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                 int duration = cusor.getInt(cusor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                songInfo = new SongInfo(id, title, displayName, album, albumId, artist, size, duration, "");
+                songInfo = new SongInfo(id, title, displayName, album, albumId, artist, track, size, duration, "");
             }
 
             cusor.close();

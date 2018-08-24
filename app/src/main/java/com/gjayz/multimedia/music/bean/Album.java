@@ -45,4 +45,14 @@ public class Album {
     public void setArtist(String artist) {
         this.artist = artist;
     }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "album_id=" + album_id +
+                ", album='" + album + '\'' +
+                ", artist_id=" + artist_id +
+                ", artist='" + artist + '\'' +
+                '}';
+    }
 }

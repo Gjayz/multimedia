@@ -97,8 +97,9 @@ public class MediaPlayerControl implements MediaPlayer.OnErrorListener, MediaPla
         return isInitPlayer;
     }
 
-    public void seekTo(int time) {
-        mMediaPlayer.seekTo(time);
+    public long seekTo(long time) {
+        mMediaPlayer.seekTo((int) time);
+        return time;
     }
 
     public void start() {
@@ -151,5 +152,13 @@ public class MediaPlayerControl implements MediaPlayer.OnErrorListener, MediaPla
 
     public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
+    }
+
+    public long position() {
+        return mMediaPlayer.getCurrentPosition();
+    }
+
+    public long duration() {
+        return mMediaPlayer.getDuration();
     }
 }

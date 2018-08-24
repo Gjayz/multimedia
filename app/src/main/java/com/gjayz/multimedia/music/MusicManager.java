@@ -12,7 +12,10 @@ import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.utils.FileUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.validation.Validator;
 
@@ -29,6 +32,7 @@ public class MusicManager {
             MediaStore.Audio.Media.ALBUM_ID,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
+            MediaStore.Audio.Media.TRACK,
             MediaStore.Audio.Media.SIZE,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.DATA
@@ -45,6 +49,15 @@ public class MusicManager {
     private static final String[] PROJECT_ALBUM = {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Albums.ALBUM,
+            MediaStore.Audio.Albums.ARTIST,
+            MediaStore.Audio.Media.ARTIST_ID
+    };
+
+
+    private static final String[] PROJECT_ALBUM2 = {
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Albums.ALBUM,
+            MediaStore.Audio.Media.ALBUM_ID,
             MediaStore.Audio.Albums.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID
     };
@@ -96,11 +109,12 @@ public class MusicManager {
                     String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                     String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                     int albumId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                    int track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
                     String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                     long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                     int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                    SongInfo musicInfo = new SongInfo(id, title, displayName, album, albumId, artist, size, duration, filePath);
+                    SongInfo musicInfo = new SongInfo(id, title, displayName, album, albumId, artist, track, size, duration, filePath);
                     musicInfos.add(musicInfo);
                 }
             }
@@ -276,11 +290,12 @@ public class MusicManager {
                     String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                     String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                     int albumId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                    int track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
                     String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                     long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                     int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                    songInfo = new SongInfo(id, title, displayName, album, albumId, artist, size, duration, filePath);
+                    songInfo = new SongInfo(id, title, displayName, album, albumId, artist, track, size, duration, filePath);
                 }
             }
         } catch (Exception ex) {
@@ -310,11 +325,12 @@ public class MusicManager {
                     String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                     String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                     int albumId2 = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                    int track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
                     String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                     long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                     int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                    result.add(new SongInfo(id, title, displayName, album, albumId, artist, size, duration, filePath));
+                    result.add(new SongInfo(id, title, displayName, album, albumId, artist, track, size, duration, filePath));
                 }
             }
         } catch (Exception ex) {
@@ -325,5 +341,55 @@ public class MusicManager {
             }
         }
         return result;
+    }
+
+    public List<Album> getSchoolAlbum(int school_id) {
+        Set<Album> albumSet = new HashSet<>();
+        Cursor cursor = null;
+        try {
+            cursor = mContext.getContentResolver().query(MediaStore.Audio.Genres.Members.getContentUri("external", school_id), PROJECT_SCHOOL_AUDIO,
+                    MediaStore.Audio.Genres.Members.GENRE_ID + "=?", new String[]{String.valueOf(school_id)}, MediaStore.Audio.Genres.Members.AUDIO_ID);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    long audio_id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.Members.AUDIO_ID));
+                    albumSet.add(getAlbum(audio_id));
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        List<Album> result = new ArrayList<>();
+        result.addAll(albumSet);
+        return result;
+    }
+
+    private Album getAlbum(long audio_id) {
+        Album album = null;
+        Cursor cursor = null;
+        try {
+            cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, PROJECT_ALBUM2,
+                    MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(audio_id)}, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                    int albumId = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                    String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM));
+                    int artist_id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID));
+                    String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AlbumColumns.ARTIST));
+                    album = new Album(albumId, albumName, artist_id, artist);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return album;
     }
 }

@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.utils.TimeUtils;
 
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class AlbumMusicAdapter extends BaseQuickAdapter<SongInfo, AlbumMusicAdap
 
     @Override
     protected void convert(Holder helper, SongInfo item) {
+        helper.mMusicIndexView.setText(String.valueOf(item.getTrack()));
         helper.mMusicNameView.setText(item.getTitle());
-//        helper.mMusicDurationView.setText(item.getDuration());
+        helper.mMusicDurationView.setText(TimeUtils.formatMusicTime(item.getDuration() / 1000));
     }
 
     static class Holder extends BaseViewHolder {

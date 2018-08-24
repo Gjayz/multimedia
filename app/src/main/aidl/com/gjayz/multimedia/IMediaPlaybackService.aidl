@@ -28,6 +28,7 @@ interface IMediaPlaybackService
     void stop();
     void pause();
     void play();
+    void playPosition(int position);
     void prev();
     void next();
     long duration();

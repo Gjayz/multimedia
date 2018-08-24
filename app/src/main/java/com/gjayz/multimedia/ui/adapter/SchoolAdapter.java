@@ -1,6 +1,5 @@
 package com.gjayz.multimedia.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.School;
 import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.ui.activity.SchoolActivity;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,7 +38,7 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        School school = mSchoolsList.get(position);
+        final School school = mSchoolsList.get(position);
         holder.school_name_tv.setText(school.getName());
         List<SongInfo> songInfoList = school.getAlbum_id();
         if (songInfoList.size() > 0) {
@@ -46,6 +46,12 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.Holder> {
                     holder.school_icon_iv, new DisplayImageOptions.Builder().cacheInMemory(true)
                             .resetViewBeforeLoading(true).build());
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SchoolActivity.newIntent(mContext, school.getId(), school.getName());
+            }
+        });
     }
 
     @Override

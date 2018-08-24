@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item
+        android:id="@+id/jump_to_album"
+        android:title="@string/strJumpToAlbum" />
+
+    <item
+        android:id="@+id/jump_to_artis"
+        android:title="@string/strJumpToArtist" />
+
+    <item
+        android:id="@+id/jump_to_eq"
+        android:title="@string/strJumpToEQ" />
+
+    <item
+        android:id="@+id/jump_to_setting"
+        android:title="@string/strJumpToSetting" />
+</menu>

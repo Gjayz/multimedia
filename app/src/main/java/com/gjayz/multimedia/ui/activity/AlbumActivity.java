@@ -2,6 +2,7 @@ package com.gjayz.multimedia.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicManager;
 import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.music.player.ListType;
+import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.ui.adapter.AlbumMusicAdapter;
 import com.gjayz.multimedia.ui.adapter.MusicAdapter;
 import com.gjayz.multimedia.utils.ZXUtils;
@@ -33,15 +37,28 @@ public class AlbumActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView mRecyclerView;
     @BindView(R.id.artist_icon_view)
     ImageView mIconView;
+
+    @BindView(R.id.album_name_view)
+    TextView albumNameTv;
+    @BindView(R.id.album_icon_view)
+    ImageView albumIconView;
+    @BindView(R.id.artist_name_tv)
+    TextView artistNameTv;
+    @BindView(R.id.music_count_tv)
+    TextView musicCountTv;
+
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+
+    @BindView(R.id.fab)
+    FloatingActionButton mFloatingActionButton;
     private int mAlbumId;
     private String mAlbum;
-//    private View mHeaderLayout;
     private AlbumMusicAdapter mAlbumMusicAdapter;
     private List<SongInfo> mAlbumMusicList;
+    private long[] mSongList;
 
     @Override
     public int layoutId() {
@@ -59,34 +76,51 @@ public class AlbumActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mAlbumMusicList = MusicManager.getInstance(this).getAlbumMusicList(mAlbumId);
-        mAlbumMusicAdapter = new AlbumMusicAdapter(mAlbumMusicList);
-        addHeadLayout();
+        mSongList = createSongList();
 
+        mAlbumMusicAdapter = new AlbumMusicAdapter(mAlbumMusicList);
+        mAlbumMusicAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MusicPlayer.playList(mSongList, position, ListType.Album);
+            }
+        });
         mRecyclerView.setAdapter(mAlbumMusicAdapter);
 
-        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mAlbumId).toString(),
-                mIconView, new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .resetViewBeforeLoading(true).build());
-
+        addHeadLayout();
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicPlayer.playList(mSongList, 0, ListType.Album);
+            }
+        });
     }
 
     private void addHeadLayout() {
-//        mHeaderLayout = LayoutInflater.from(this).inflate(R.layout.album_header_layout, null);
-//        mAlbumMusicAdapter.addHeaderView(mHeaderLayout);
-
-        TextView albumNameTv = findViewById(R.id.album_name_view);
-        ImageView albumIconView = findViewById(R.id.album_icon_view);
-        TextView artistNameTv = findViewById(R.id.artist_name_tv);
-        TextView musicCountTv = findViewById(R.id.music_count_tv);
         albumNameTv.setText(mAlbum);
-        artistNameTv.setText(mAlbum);
-        musicCountTv.setText(String.valueOf(mAlbumMusicList.size()));
+        artistNameTv.setText(mAlbumMusicList.get(0).getArtist());
+        musicCountTv.setText(mAlbumMusicList.size()+ " 首歌曲");
 
         ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mAlbumId).toString(),
                 albumIconView, new DisplayImageOptions.Builder().cacheInMemory(true)
                         .resetViewBeforeLoading(true).build());
+
+        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mAlbumId).toString(),
+                mIconView, new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .resetViewBeforeLoading(true).build());
+    }
+
+    private long[] createSongList() {
+        long[] result = null;
+        if (mAlbumMusicList != null) {
+            int size = mAlbumMusicList.size();
+            result = new long[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = mAlbumMusicList.get(i).getId();
+            }
+        }
+        return result;
     }
 
     @Override

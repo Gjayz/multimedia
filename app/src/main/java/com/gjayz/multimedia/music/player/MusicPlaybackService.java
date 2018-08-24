@@ -52,6 +52,11 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
     }
 
     @Override
+    public void playPosition(int position) throws RemoteException {
+        mMusicService.get().goToPosition(position);
+    }
+
+    @Override
     public void prev() throws RemoteException {
         mMusicService.get().prev();
     }

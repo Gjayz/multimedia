@@ -36,6 +36,8 @@
                 android:id="@+id/music_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="@dimen/textsize_mid" />
 
@@ -43,6 +45,9 @@
                 android:id="@+id/music_duration_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/music_title_tv"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textSize="@dimen/textsize_small" />
 
         </RelativeLayout>

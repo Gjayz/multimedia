@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicManager;
 import com.gjayz.multimedia.music.bean.Album;
@@ -39,6 +40,7 @@ public class ArtistActivity extends BaseActivity {
     private int mArtist_id;
     private String mArtist;
     private ImageView mArtistIconView;
+    private List<Album> mAlbumList;
 
     @Override
     public int layoutId() {
@@ -58,14 +60,21 @@ public class ArtistActivity extends BaseActivity {
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        List<Album> albumList = MusicManager.getInstance(this).getAlbumList(mArtist_id);
-        ArtistAlbumAdapter artistAlbumAdapter = new ArtistAlbumAdapter(this, albumList);
+        mAlbumList = MusicManager.getInstance(this).getAlbumList(mArtist_id);
+        ArtistAlbumAdapter artistAlbumAdapter = new ArtistAlbumAdapter(this, mAlbumList);
         mRecyclerView.setAdapter(artistAlbumAdapter);
         artistAlbumAdapter.addHeaderView(headerView);
+        artistAlbumAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Album album = mAlbumList.get(position);
+                AlbumActivity.newIntent(ArtistActivity.this, album.getAlbum_id(), album.getAlbum());
+            }
+        });
 
-        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(albumList.get(0).getAlbum_id()).toString(),
+        ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mAlbumList.get(0).getAlbum_id()).toString(),
                 mArtistView, new DisplayImageOptions.Builder().cacheInMemory(true)
-                .resetViewBeforeLoading(true).build());
+                        .resetViewBeforeLoading(true).build());
     }
 
     @Override

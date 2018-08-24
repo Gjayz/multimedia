@@ -116,6 +116,79 @@ public class MusicPlayer {
         return null;
     }
 
+    public static void playPrev() {
+        try {
+            if (sService != null) {
+                sService.prev();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void playNext() {
+        try {
+            if (sService != null) {
+                sService.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static long getAudioId() {
+        try {
+            if (sService != null) {
+                return sService.getAudioId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static long getPlayPosition() {
+        try {
+            if (sService != null) {
+                return sService.position();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static long getDuration() {
+        try {
+            if (sService != null) {
+                return sService.duration();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static void seekTo(int progress) {
+        try {
+            if (sService != null) {
+                sService.seek(progress * 1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void playPosition(int position) {
+        try {
+            if (sService != null) {
+                sService.playPosition(position);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static final class ServiceToken {
         public ContextWrapper mWrappedContext;
 

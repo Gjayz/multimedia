@@ -8,6 +8,7 @@ public class SongInfo {
     String albumName;
     int albumId;
     String artist;
+    int track;
     long size;
     int duration;
     String path;
@@ -15,33 +16,58 @@ public class SongInfo {
     public SongInfo() {
     }
 
-    public SongInfo(long id, String title, String displayName, String albumName,
-                    int albumId, String artist, long size, int duration, String path) {
+    public SongInfo(long id, String title, String displayName, String albumName, int albumId,
+                    String artist, int track, long size, int duration, String path) {
         this.id = id;
         this.title = title;
+        this.displayName = displayName;
         this.albumName = albumName;
         this.albumId = albumId;
         this.artist = artist;
+        this.track = track;
         this.size = size;
         this.duration = duration;
         this.path = path;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title == null ? "" : title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDisplayName() {
+        return displayName == null ? "" : displayName;
+    }
+
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getPath() {
-        return path == null ? "" : path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getAlbumName() {
         return albumName == null ? "" : albumName;
     }
 
-    public void setAlbumName(String album) {
-        this.albumName = album;
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public int getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(int albumId) {
+        this.albumId = albumId;
     }
 
     public String getArtist() {
@@ -50,6 +76,14 @@ public class SongInfo {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public int getTrack() {
+        return track;
+    }
+
+    public void setTrack(int track) {
+        this.track = track;
     }
 
     public long getSize() {
@@ -68,35 +102,27 @@ public class SongInfo {
         this.duration = duration;
     }
 
-    public String getTitle() {
-        return title == null ? "" : title;
+    public String getPath() {
+        return path == null ? "" : path;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
-    }
-
-    public String getDisplayName() {
-        return displayName == null ? "" : displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    @Override
+    public String toString() {
+        return "SongInfo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", albumName='" + albumName + '\'' +
+                ", albumId=" + albumId +
+                ", artist='" + artist + '\'' +
+                ", track=" + track +
+                ", size=" + size +
+                ", duration=" + duration +
+                ", path='" + path + '\'' +
+                '}';
     }
 }

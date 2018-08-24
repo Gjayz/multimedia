@@ -32,6 +32,7 @@
         <activity
             android:name=".ui.activity.AlbumActivity"
             android:theme="@style/AppTheme.TranslucentBG.TranslucentBar" />
+        <activity android:name=".ui.activity.SchoolActivity" />
 
         <service
             android:name=".music.service.MusicService"

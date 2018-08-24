@@ -15,6 +15,7 @@ public class MusicDbHelper {
     public static final int COLUM_MIME_TYPE = 5;
     public static final int COLUM_ALBUM_ID = 6;
     public static final int COLUM_ARTIST_ID = 7;
+    public static final int COLUM_DURATION = 8;
 
     private final Object mLock = new Object();
 
@@ -22,7 +23,7 @@ public class MusicDbHelper {
             MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.MIME_TYPE, MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.ARTIST_ID
+            MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.DURATION
     };
 
     public static final String[] ALBUM_PROJECTION = new String[]{
@@ -136,7 +137,7 @@ public class MusicDbHelper {
     }
 
     public long duration() {
-        return 0;
+        return mCursor.getLong(COLUM_DURATION);
     }
 
     public String getTrackName() {

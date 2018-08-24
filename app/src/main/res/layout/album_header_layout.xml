@@ -16,7 +16,7 @@
         android:layout_marginStart="@dimen/padding_10"
         android:ellipsize="end"
         android:textColor="@color/black"
-        android:textSize="@dimen/textsize_big" />
+        android:textSize="@dimen/textsize_mid" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,8 +26,8 @@
         android:layout_marginStart="@dimen/padding_10"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/padding_10"
-        android:paddingTop="@dimen/padding_10">
+        android:paddingBottom="@dimen/padding_5"
+        android:paddingTop="@dimen/padding_5">
 
         <ImageView
             android:id="@+id/album_icon_view"
@@ -46,15 +46,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="@dimen/textsize_mid" />
+                android:textSize="@dimen/textsize_small" />
 
             <TextView
                 android:id="@+id/music_count_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/artist_name_tv"
-                android:textSize="@dimen/textsize_small" />
-
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/textsize_mcro" />
 
         </RelativeLayout>
 

@@ -8,6 +8,7 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="white_transparent">#eeffffff</color>
+    <color name="white_dark">#aaffffff</color>
     <color name="gray">#44888888</color>
     <color name="dark_gray">#888888</color>
     <color name="black">#000000</color>

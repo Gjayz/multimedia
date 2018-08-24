@@ -21,8 +21,16 @@
     <dimen name="padding_5">5dp</dimen>
     <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding_15">15dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_50">50dp</dimen>
     <dimen name="width_40">40dp</dimen>
     <dimen name="width_50">50dp</dimen>
+    <dimen name="width_1000">1000dp</dimen>
+    <dimen name="play_bottom_width">48dp</dimen>
+    <dimen name="height_10">10dp</dimen>
+    <dimen name="height_20">20dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="height_6">6dp</dimen>
+    <dimen name="height_4">4dp</dimen>
 </resources>

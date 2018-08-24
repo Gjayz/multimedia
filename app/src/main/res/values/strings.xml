@@ -201,4 +201,8 @@
     <string name="strCopyTestResult">复制测试结果</string>
     <string name="strSearch">搜索</string>
     <string name="strMusicLib">在我的乐库中</string>
+    <string name="strJumpToAlbum">转到专辑</string>
+    <string name="strJumpToArtist">转到艺术家</string>
+    <string name="strJumpToEQ">均衡器</string>
+    <string name="strJumpToSetting">设置</string>
 </resources>

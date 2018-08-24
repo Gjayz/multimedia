@@ -1,6 +1,7 @@
 package com.gjayz.multimedia.music.service;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -10,12 +11,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.gjayz.multimedia.BuildConfig;
+import com.gjayz.multimedia.config.GlideOptions;
 import com.gjayz.multimedia.music.bean.MusicPlaybackTrack;
 import com.gjayz.multimedia.music.data.MusicDbHelper;
 import com.gjayz.multimedia.music.player.ListType;
@@ -40,6 +43,7 @@ public class MusicService extends Service {
 
     public static final String KEY_PLAY_STATUS = "key_play_status";
     private PlayStatus mStatus;
+    private AlarmManager mAlarmManager;
 
     public enum PlayStatus {
         UNKNOWN(0),
@@ -70,8 +74,10 @@ public class MusicService extends Service {
     public int mCurPos;
     private int mNextPos;
     private String mFileToPlay;
-    private int mOpenFailedCounter;
+    private int mOpenFailedCount;
     public MusicDbHelper mMusicDbHelper;
+    private boolean mIsSupposedToBePlaying = false;
+    private long mLastPlayedTime;
 
     private ArrayList<MusicPlaybackTrack> mPlaylist = new ArrayList<MusicPlaybackTrack>(100);
 
@@ -82,7 +88,7 @@ public class MusicService extends Service {
                 case AudioManager.AUDIOFOCUS_GAIN:
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    if (isPlaying()){
+                    if (isPlaying()) {
                         pauseInternal();
                     }
                     break;
@@ -120,6 +126,7 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         mMusicMsgHandler = new MusicMsgHandler(this);
         initMediaPlayer();
         createDbHelper();
@@ -196,6 +203,7 @@ public class MusicService extends Service {
         setNextTrack(getNextPosition());
     }
 
+
     private void setNextTrack(int position) {
         mNextPos = position;
         if (BuildConfig.DEBUG) Log.d(TAG, "setNextTrack: next play position = " + mNextPos);
@@ -209,6 +217,10 @@ public class MusicService extends Service {
 
     private int getNextPosition() {
         return mCurPos + 1;
+    }
+
+    public int getPrevPostion() {
+        return mCurPos - 1;
     }
 
     private boolean isPlayingInternal() {
@@ -258,7 +270,7 @@ public class MusicService extends Service {
             mFileToPlay = path;
             mMediaPlayerControl.setDataSource(mFileToPlay);
             if (mMediaPlayerControl.isInitPlayer()) {
-                mOpenFailedCounter = 0;
+                mOpenFailedCount = 0;
                 return true;
             }
 
@@ -355,6 +367,30 @@ public class MusicService extends Service {
         }
     }
 
+    public void goToPosition(int pos) {
+        synchronized (this) {
+            if (mPlaylist.size() <= 0) {
+                if (BuildConfig.DEBUG) Log.d(TAG, "No play queue");
+                scheduleDelayedShutdown();
+                return;
+            }
+            if (pos < 0) {
+                return;
+            }
+            if (pos == mCurPos) {
+                if (!isPlaying()) {
+                    playInternal();
+                }
+                return;
+            }
+            stop(false);
+            setAndRecordPlayPos(pos);
+            playCurrentAndNext();
+            playInternal();
+            notifyChange(META_CHANGED);
+        }
+    }
+
     /**
      * 获取当前正在播放的歌曲的id
      *
@@ -389,21 +425,32 @@ public class MusicService extends Service {
     }
 
     public void prev() {
+        goToPosition(getPrevPostion());
     }
 
     public void next() {
+        goToPosition(getNextPosition());
     }
 
     public long duration() {
-        return mMusicDbHelper.duration();
+        if (mMediaPlayerControl.isInitPlayer()) {
+            return mMediaPlayerControl.duration();
+        }
+        return -1;
     }
 
     public long position() {
-        return mCurPos;
+        if (mMediaPlayerControl.isInitPlayer()) {
+            return mMediaPlayerControl.position();
+        }
+        return -1;
     }
 
     public long seek(long pos) {
-        return pos;
+        if (mMediaPlayerControl.isInitPlayer()) {
+            return mMediaPlayerControl.seekTo(pos);
+        }
+        return -1;
     }
 
     public String getAlbumName() {
@@ -467,13 +514,13 @@ public class MusicService extends Service {
     }
 
     public long[] getQueue() {
-        if (mPlaylist != null){
+        if (mPlaylist != null) {
             long[] songs = new long[mPlaylist.size()];
-            for (int i = 0; i < mPlaylist.size(); i ++) {
+            for (int i = 0; i < mPlaylist.size(); i++) {
                 songs[i] = mPlaylist.get(i).mId;
             }
             return songs;
-        }else {
+        } else {
             return null;
         }
     }
@@ -487,11 +534,42 @@ public class MusicService extends Service {
     }
 
     public void stop() {
-        if (mMediaPlayerControl != null){
+        if (mMediaPlayerControl != null) {
             mMediaPlayerControl.stop();
             mStatus = PlayStatus.STOP;
 
             notifyChange(PLAYSTATE_CHANGED);
+        }
+    }
+
+    private void stop(boolean goToIdle) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "Stopping playback, goToIdle = " + goToIdle);
+
+        if (mMediaPlayerControl.isInitPlayer()) {
+            mMediaPlayerControl.stop();
+        }
+        mFileToPlay = null;
+        mMusicDbHelper.closeCursor();
+        if (goToIdle) {
+            setIsSupposedToBePlaying(false, false);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                stopForeground(false);
+            else stopForeground(true);
+        }
+    }
+
+    private void setIsSupposedToBePlaying(boolean value, boolean notify) {
+        if (mIsSupposedToBePlaying != value) {
+            mIsSupposedToBePlaying = value;
+            if (!mIsSupposedToBePlaying) {
+                scheduleDelayedShutdown();
+                mLastPlayedTime = System.currentTimeMillis();
+            }
+
+            if (notify) {
+                notifyChange(PLAYSTATE_CHANGED);
+            }
         }
     }
 
@@ -513,8 +591,16 @@ public class MusicService extends Service {
         sendStickyBroadcast(intent);
     }
 
-    public void setAndRecordPlayPos() {
-        mCurPos = mNextPos;
+    public void setAndRecordPlayPos(int nextPos) {
+        synchronized (this) {
+//        if (mShuffleMode != SHUFFLE_NONE) {
+//            mHistory.add(mPlayPos);
+//            if (mHistory.size() > MAX_HISTORY_SIZE) {
+//                mHistory.remove(0);
+//            }
+//        }
+            mCurPos = nextPos;
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -530,10 +616,10 @@ public class MusicService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
+            MusicService service = mServiceWeakReference.get();
             switch (msg.what) {
                 case MSG_GOTO_NEXT_TRACK:
-                    MusicService service = mServiceWeakReference.get();
-                    service.setAndRecordPlayPos();
+                    service.setAndRecordPlayPos(mNextPos);
                     service.setNextTrack();
                     if (service.mMusicDbHelper != null) {
                         if (service.mMusicDbHelper.isCursorOpen()) {
@@ -545,5 +631,23 @@ public class MusicService extends Service {
                     break;
             }
         }
+    }
+
+
+    private static final int IDLE_DELAY = 5 * 60 * 1000;
+
+    private void scheduleDelayedShutdown() {
+        if (BuildConfig.DEBUG) Log.v(TAG, "Scheduling shutdown in " + IDLE_DELAY + " ms");
+//        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                SystemClock.elapsedRealtime() + IDLE_DELAY, mShutdownIntent);
+//        mShutdownScheduled = true;
+    }
+
+    private void cancelShutdown() {
+//        if (D) Log.d(TAG, "Cancelling delayed shutdown, scheduled = " + mShutdownScheduled);
+//        if (mShutdownScheduled) {
+//            mAlarmManager.cancel(mShutdownIntent);
+//            mShutdownScheduled = false;
+//        }
     }
 }
