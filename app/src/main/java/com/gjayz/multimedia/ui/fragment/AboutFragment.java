@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import com.gjayz.multimedia.BuildConfig;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.ui.activity.ToolBarActivity;
+import com.gjayz.multimedia.ui.utils.IntentUtil;
 
 public class AboutFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -58,13 +59,13 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             case KEY_SOFT_VERSION:
                 break;
             case KEY_DEVICE_INFO:
-                startActivity(ToolBarActivity.newIntent(getActivity(), getString(R.string.strDeviceInfo), ToolBarActivity.TYPE_DEVICEINFO));
+                IntentUtil.startDeviceInfosActivity(getActivity());
                 break;
             case KEY_NETWORK:
-                startActivity(ToolBarActivity.newIntent(getActivity(), getString(R.string.strNetwork), ToolBarActivity.TYPE_NET));
+                IntentUtil.startNetActivity(getActivity());
                 break;
             case KEY_TEST:
-                startActivity(ToolBarActivity.newIntent(getActivity(), getString(R.string.strTest), ToolBarActivity.TYPE_TEST));
+                IntentUtil.startTestActivity(getActivity());
                 break;
         }
         return false;

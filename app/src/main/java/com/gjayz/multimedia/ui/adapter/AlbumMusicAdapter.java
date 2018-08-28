@@ -32,7 +32,7 @@ public class AlbumMusicAdapter extends BaseQuickAdapter<SongInfo, AlbumMusicAdap
 
         public Holder(View itemView) {
             super(itemView);
-            mMusicIndexView = itemView.findViewById(R.id.musci_track_index_tv);
+            mMusicIndexView = itemView.findViewById(R.id.music_track_index_tv);
             mMusicNameView = itemView.findViewById(R.id.music_title_tv);
             mMusicDurationView = itemView.findViewById(R.id.music_duration_tv);
         }

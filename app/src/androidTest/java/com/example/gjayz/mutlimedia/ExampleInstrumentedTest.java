@@ -22,5 +22,8 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.example.gjayz.mutlimedia", appContext.getPackageName());
+
+
+        System.out.print(Integer.MAX_VALUE);
     }
 }

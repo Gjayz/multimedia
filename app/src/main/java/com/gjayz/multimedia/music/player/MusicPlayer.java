@@ -189,6 +189,17 @@ public class MusicPlayer {
         }
     }
 
+    public static int getAudioSessionId() {
+        try {
+            if (sService != null) {
+                return sService.getAudioSessionId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static final class ServiceToken {
         public ContextWrapper mWrappedContext;
 

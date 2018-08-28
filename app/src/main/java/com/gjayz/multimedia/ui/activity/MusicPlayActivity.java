@@ -4,15 +4,20 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.ui.adapter.MusicPlayAdapter;
+import com.gjayz.multimedia.ui.utils.IntentUtil;
 import com.gjayz.multimedia.utils.TimeUtils;
 
 
@@ -23,10 +28,10 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
 
     private static final String TAG = "MusicPlayActivity";
     private static final int MSG_PLAY_POSITION = 1;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.music_play_viewpager)
     ViewPager mViewPager;
-    @BindView(R.id.operate_layout)
-    View mOperateLayout;
 
     @BindView(R.id.seekbar)
     SeekBar mSeekBar;
@@ -42,10 +47,10 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     private boolean isIdle = true;
     private Handler mHandler = new Handler();
     @SuppressLint("HandlerLeak")
-    private Handler mViewPagerHandler = new Handler(){
+    private Handler mViewPagerHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case MSG_PLAY_POSITION:
                     MusicPlayer.playPosition(msg.arg1);
                     break;
@@ -75,6 +80,9 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     @Override
     public void initActivity() {
         mSwipeBackPage.setSwipeBackEnable(false);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+
         mPlayList = MusicPlayer.getPlayList();
 
         mViewPager.setOffscreenPageLimit(3);
@@ -93,7 +101,7 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
         int duration = (int) MusicPlayer.getDuration() / 1000;
         int listPosition = getListPosition(audioId);
 
-        if (listPosition != mViewPager.getCurrentItem() && isIdle){
+        if (listPosition != mViewPager.getCurrentItem() && isIdle) {
             mViewPager.setCurrentItem(listPosition, false);
         }
 
@@ -130,7 +138,7 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
         Log.d(TAG, "onPageScrollStateChanged: state = " + state);
         if (state == ViewPager.SCROLL_STATE_IDLE) {
             isIdle = true;
-            mOperateLayout.setVisibility(View.VISIBLE);
+//            mOperateLayout.setVisibility(View.VISIBLE);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -141,15 +149,42 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
 //            mViewPagerHandler.sendMessageDelayed(mViewPagerHandler.obtainMessage(MSG_PLAY_POSITION, mViewPager.getCurrentItem(), 0), 500);
         } else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
             isIdle = false;
-            mOperateLayout.setVisibility(View.GONE);
+//            mOperateLayout.setVisibility(View.GONE);
         } else {
             isIdle = false;
-            mOperateLayout.setVisibility(View.GONE);
+//            mOperateLayout.setVisibility(View.GONE);
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_music_play, menu);
+        return true;
+    }
 
-    @OnClick({R.id.button_like, R.id.button_prev, R.id.button_play_pause, R.id.button_next, R.id.button_unlike})
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_list:
+                return true;
+            case R.id.jump_to_album:
+                return true;
+            case R.id.jump_to_artis:
+                return true;
+            case R.id.all_radom:
+                return true;
+            case R.id.jump_to_eq:
+                IntentUtil.startEffectsActivity(this);
+                return true;
+            case R.id.jump_to_setting:
+                IntentUtil.startSettingsActivity(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick({R.id.button_like, R.id.button_prev, R.id.button_play_pause, R.id.button_next,
+            R.id.button_unlike,})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_like:
@@ -217,5 +252,13 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
         MusicPlayer.seekTo(progress);
+    }
+
+    private void showPlayList() {
+
+    }
+
+    private void showMenu() {
+
     }
 }

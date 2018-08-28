@@ -188,7 +188,6 @@
     <string name="strDeviceInfo">设备信息</string>
     <string name="strNetwork">网络诊断</string>
 
-
     <string name="strPersonalized">个性化</string>
     <string name="strNightMode">夜间模式</string>
     <string name="strNightModeSummary">夜间模式应用到整个应用</string>
@@ -205,4 +204,5 @@
     <string name="strJumpToArtist">转到艺术家</string>
     <string name="strJumpToEQ">均衡器</string>
     <string name="strJumpToSetting">设置</string>
+    <string name="strAllRandom">全部随机</string>
 </resources>

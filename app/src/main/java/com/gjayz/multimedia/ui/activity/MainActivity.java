@@ -27,6 +27,7 @@ import com.gjayz.multimedia.swipeback.SwipeBackHelper;
 import com.gjayz.multimedia.ui.fragment.EnjoyMusicFragment;
 import com.gjayz.multimedia.ui.fragment.MusicLibaryFragment;
 import com.gjayz.multimedia.permission.ZXPermission;
+import com.gjayz.multimedia.ui.utils.IntentUtil;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -145,10 +146,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.action_setting:
-                startActivity(ToolBarActivity.newIntent(this, getString(R.string.strSettings), ToolBarActivity.TYPE_SETTINGS));
+                IntentUtil.startSettingsActivity(this);
                 break;
             case R.id.action_about:
-                startActivity(ToolBarActivity.newIntent(this, getString(R.string.strAbout), ToolBarActivity.TYPE_ABOUT));
+                IntentUtil.startAboutActivity(this);
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -219,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onPlayStatusChanged(int status) {
-        switch (status){
+        switch (status) {
             case 0:
                 mMusicPlayView.setSelected(false);
                 break;

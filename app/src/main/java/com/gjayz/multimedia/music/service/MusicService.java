@@ -11,14 +11,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.gjayz.multimedia.BuildConfig;
-import com.gjayz.multimedia.config.GlideOptions;
 import com.gjayz.multimedia.music.bean.MusicPlaybackTrack;
 import com.gjayz.multimedia.music.data.MusicDbHelper;
 import com.gjayz.multimedia.music.player.ListType;
