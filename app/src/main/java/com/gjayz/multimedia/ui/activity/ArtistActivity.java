@@ -1,7 +1,7 @@
 package com.gjayz.multimedia.ui.activity;
 
-import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,19 +16,24 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.MusicManager;
 import com.gjayz.multimedia.music.bean.Album;
+import com.gjayz.multimedia.music.bean.SongInfo;
+import com.gjayz.multimedia.music.player.ListType;
+import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.ui.adapter.ArtistAlbumAdapter;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ArtistActivity extends BaseActivity {
 
-    private static final String KEY_ARTIST = "key_artist";
-    private static final String KEY_ARTIST_ID = "key_artist_id";
+    public static final String KEY_ARTIST = "key_artist";
+    public static final String KEY_ARTIST_ID = "key_artist_id";
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerView;
@@ -36,11 +41,15 @@ public class ArtistActivity extends BaseActivity {
     Toolbar mToolbar;
     @BindView(R.id.artist_icon_view)
     ImageView mArtistView;
+    @BindView(R.id.fab)
+    FloatingActionButton mFloatingActionButton;
 
     private int mArtist_id;
     private String mArtist;
     private ImageView mArtistIconView;
     private List<Album> mAlbumList;
+    private ArrayList<SongInfo> mMusiclist;
+    private ArtisMusicListTask mArtisMusicListTask;
 
     @Override
     public int layoutId() {
@@ -75,6 +84,9 @@ public class ArtistActivity extends BaseActivity {
         ImageLoader.getInstance().displayImage(ZXUtils.getAlbumArtUri(mAlbumList.get(0).getAlbum_id()).toString(),
                 mArtistView, new DisplayImageOptions.Builder().cacheInMemory(true)
                         .resetViewBeforeLoading(true).build());
+
+        mArtisMusicListTask = new ArtisMusicListTask();
+        mArtisMusicListTask.execute();
     }
 
     @Override
@@ -94,10 +106,39 @@ public class ArtistActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static Intent newIntent(Context context, int artistId, String artist) {
-        Intent intent = new Intent(context, ArtistActivity.class);
-        intent.putExtra(KEY_ARTIST, artist);
-        intent.putExtra(KEY_ARTIST_ID, artistId);
-        return intent;
+    @OnClick({R.id.fab})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                playAllMusic();
+                break;
+        }
+    }
+
+    private void playAllMusic() {
+        MusicPlayer.playList(mMusiclist, 0, ListType.Artist);
+    }
+
+    public class ArtisMusicListTask extends AsyncTask<Void, Void, List<SongInfo>> {
+
+        @Override
+        protected List<SongInfo> doInBackground(Void... voids) {
+            mMusiclist = new ArrayList<>();
+            for (Album album : mAlbumList) {
+                mMusiclist.addAll(MusicManager.getInstance(ArtistActivity.this).getAlbumMusicList(album.getAlbum_id()));
+            }
+            return mMusiclist;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mArtisMusicListTask != null) {
+            if (!mArtisMusicListTask.isCancelled()) {
+                mArtisMusicListTask.cancel(true);
+            }
+            mArtisMusicListTask = null;
+        }
+        super.onDestroy();
     }
 }

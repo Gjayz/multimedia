@@ -33,4 +33,6 @@
     <dimen name="padding_12">12dp</dimen>
     <dimen name="height_6">6dp</dimen>
     <dimen name="height_4">4dp</dimen>
+    <dimen name="height_60">60dp</dimen>
+    <dimen name="padding_80">80dp</dimen>
 </resources>

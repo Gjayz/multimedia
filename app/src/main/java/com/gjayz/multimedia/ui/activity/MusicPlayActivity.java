@@ -1,30 +1,38 @@
 package com.gjayz.multimedia.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
+import com.gjayz.multimedia.music.MusicManager;
+import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.music.player.MusicPlayer;
+import com.gjayz.multimedia.ui.adapter.MusicAdapter;
 import com.gjayz.multimedia.ui.adapter.MusicPlayAdapter;
 import com.gjayz.multimedia.ui.utils.IntentUtil;
 import com.gjayz.multimedia.utils.TimeUtils;
 
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener {
+public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageChangeListener,
+        SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = "MusicPlayActivity";
     private static final int MSG_PLAY_POSITION = 1;
@@ -41,6 +49,8 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     TextView mTotalTimeView;
     @BindView(R.id.button_play_pause)
     ImageButton mPlayButton;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
 
     private long[] mPlayList;
 
@@ -57,6 +67,7 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
             }
         }
     };
+
     public Runnable mUpdateProgreeRunnable = new Runnable() {
         @Override
         public void run() {
@@ -71,6 +82,7 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
             mHandler.postDelayed(mUpdateProgreeRunnable, delay); //delay
         }
     };
+    private ScanMusicInfoTask mScanMusicInfoTask;
 
     @Override
     public int layoutId() {
@@ -90,9 +102,14 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
         mViewPager.setAdapter(musicPlayAdapter);
         mViewPager.addOnPageChangeListener(this);
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         updateSongDetails();
 
         mSeekBar.setOnSeekBarChangeListener(this);
+
+        mScanMusicInfoTask = new ScanMusicInfoTask();
+        mScanMusicInfoTask.execute();
     }
 
     private void updateSongDetails() {
@@ -166,10 +183,13 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_list:
+                showPlayList();
                 return true;
             case R.id.jump_to_album:
+                IntentUtil.startAlbumActivity(this, MusicPlayer.getAlbumId(), MusicPlayer.getAlbum());
                 return true;
             case R.id.jump_to_artis:
+                IntentUtil.startArtistActivity(this, MusicPlayer.getArtistId(), MusicPlayer.getArtist());
                 return true;
             case R.id.all_radom:
                 return true;
@@ -188,6 +208,7 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_like:
+                showPlayList();
                 break;
             case R.id.button_prev:
                 MusicPlayer.playPrev();
@@ -255,10 +276,36 @@ public class MusicPlayActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     private void showPlayList() {
-
+        if (mRecyclerView.getVisibility() == View.GONE) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+        }
     }
 
-    private void showMenu() {
+    @SuppressLint("StaticFieldLeak")
+    public class ScanMusicInfoTask extends AsyncTask<Void, Void, List<SongInfo>> {
 
+        @Override
+        protected List<SongInfo> doInBackground(Void... voids) {
+            return MusicManager.getInstance(MusicPlayActivity.this).getMusicInofs(mPlayList);
+        }
+
+        @Override
+        protected void onPostExecute(List<SongInfo> songInfoList) {
+            MusicAdapter musicAdapter = new MusicAdapter(songInfoList);
+            mRecyclerView.setAdapter(musicAdapter);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mScanMusicInfoTask != null) {
+            if (!mScanMusicInfoTask.isCancelled()) {
+                mScanMusicInfoTask.cancel(true);
+            }
+            mScanMusicInfoTask = null;
+        }
+        super.onDestroy();
     }
 }

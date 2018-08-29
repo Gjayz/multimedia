@@ -463,7 +463,7 @@ public class MusicService extends Service {
         return mMusicDbHelper.getArtistName();
     }
 
-    public long getArtistId() {
+    public int getArtistId() {
         return mMusicDbHelper.getArtistId();
     }
 

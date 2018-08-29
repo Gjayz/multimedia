@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.music.player.ListType;
 import com.gjayz.multimedia.music.player.MusicPlayer;
 import com.gjayz.multimedia.ui.adapter.AlbumMusicAdapter;
-import com.gjayz.multimedia.ui.adapter.MusicAdapter;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,8 +30,8 @@ import butterknife.BindView;
 
 public class AlbumActivity extends BaseActivity {
 
-    private static final String KEY_ALBUM = "key_album";
-    private static final String KEY_ALBUM_ID = "key_album_id";
+    public static final String KEY_ALBUM = "key_album";
+    public static final String KEY_ALBUM_ID = "key_album_id";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;

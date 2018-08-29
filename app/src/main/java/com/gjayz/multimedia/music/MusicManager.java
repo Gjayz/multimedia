@@ -11,6 +11,7 @@ import com.gjayz.multimedia.music.bean.School;
 import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.utils.FileUtil;
 
+import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -385,11 +386,48 @@ public class MusicManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null){
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
         return album;
+    }
+
+    public List<SongInfo> getMusicInofs(long[] ids) {
+        List<SongInfo> result = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, PROJECT_SONG,
+                        MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(ids[i])}, null);
+                if (cursor != null) {
+                    if (cursor.moveToFirst()){
+
+                        String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                        if (!FileUtil.isExist(filePath)) {
+                            continue;
+                        }
+
+                        long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                        String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                        String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+                        String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                        int albumId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                        int track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
+                        String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                        long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
+                        int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+                        SongInfo musicInfo = new SongInfo(id, title, displayName, album, albumId, artist, track, size, duration, filePath);
+                        result.add(musicInfo);
+                    }
+                    cursor.close();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 }

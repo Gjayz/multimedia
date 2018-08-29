@@ -1,7 +1,6 @@
 package com.gjayz.multimedia.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.bean.ArtistInfo;
-import com.gjayz.multimedia.ui.activity.ArtistActivity;
+import com.gjayz.multimedia.ui.utils.IntentUtil;
 import com.gjayz.multimedia.utils.ZXUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,7 +48,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.Holder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(ArtistActivity.newIntent(mContext, artistInfo.getArtist_id(), artistInfo.getArtist()));
+                IntentUtil.startArtistActivity(mContext, artistInfo.getArtist_id(), artistInfo.getArtist());
             }
         });
     }

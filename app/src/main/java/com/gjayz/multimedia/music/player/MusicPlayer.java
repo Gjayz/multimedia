@@ -10,9 +10,11 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.gjayz.multimedia.IMediaPlaybackService;
+import com.gjayz.multimedia.music.bean.SongInfo;
 import com.gjayz.multimedia.music.service.MusicService;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MusicPlayer {
@@ -61,6 +63,18 @@ public class MusicPlayer {
 
     private static void initPlaybackServiceWithSettings(Context context) {
 
+    }
+
+    public static void playList(List<SongInfo> songInfoList, int position, ListType listType) {
+        if (songInfoList == null || songInfoList.size() == 0 || sService == null) {
+            return;
+        }else {
+            long[] songIds = new long[songInfoList.size()];
+            for (int i = 0; i < songInfoList.size(); i ++){
+                songIds[i] = songInfoList.get(i).getId();
+            }
+            playList(songIds, position, listType);
+        }
     }
 
     public static void playList(long[] songIds, int position, ListType listType) {
@@ -198,6 +212,50 @@ public class MusicPlayer {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static int getAlbumId() {
+        try {
+            if (sService != null) {
+                return sService.getAlbumId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String getAlbum() {
+        try {
+            if (sService != null) {
+                return sService.getAlbumName();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static int getArtistId() {
+        try {
+            if (sService != null) {
+                return sService.getArtistId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String getArtist() {
+        try {
+            if (sService != null) {
+                return sService.getArtistName();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static final class ServiceToken {

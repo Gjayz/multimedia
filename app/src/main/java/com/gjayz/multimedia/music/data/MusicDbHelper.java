@@ -132,8 +132,8 @@ public class MusicDbHelper {
         return mCursor.getString(COLUM_ARTIST);
     }
 
-    public long getArtistId() {
-        return mCursor.getLong(COLUM_ARTIST_ID);
+    public int getArtistId() {
+        return mCursor.getInt(COLUM_ARTIST_ID);
     }
 
     public long duration() {

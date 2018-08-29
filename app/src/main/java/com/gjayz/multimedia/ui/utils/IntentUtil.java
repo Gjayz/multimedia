@@ -7,6 +7,9 @@ import android.media.audiofx.AudioEffect;
 
 import com.gjayz.multimedia.R;
 import com.gjayz.multimedia.music.player.MusicPlayer;
+import com.gjayz.multimedia.ui.activity.AlbumActivity;
+import com.gjayz.multimedia.ui.activity.ArtistActivity;
+import com.gjayz.multimedia.ui.activity.MusicPlayActivity;
 import com.gjayz.multimedia.ui.activity.ToolBarActivity;
 
 public class IntentUtil {
@@ -48,12 +51,26 @@ public class IntentUtil {
     }
 
     public static void startEffectsActivity(Activity activity) {
-        try{
+        try {
             Intent effects = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
             effects.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, MusicPlayer.getAudioSessionId());
             activity.startActivityForResult(effects, 666);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void startAlbumActivity(Context context, int albumid, String album) {
+        Intent intent = new Intent(context, AlbumActivity.class);
+        intent.putExtra(AlbumActivity.KEY_ALBUM_ID, albumid);
+        intent.putExtra(AlbumActivity.KEY_ALBUM, album);
+        context.startActivity(intent);
+    }
+
+    public static void startArtistActivity(Context context, int artistId, String artist) {
+        Intent intent = new Intent(context, ArtistActivity.class);
+        intent.putExtra(ArtistActivity.KEY_ARTIST_ID, artistId);
+        intent.putExtra(ArtistActivity.KEY_ARTIST, artist);
+        context.startActivity(intent);
     }
 }

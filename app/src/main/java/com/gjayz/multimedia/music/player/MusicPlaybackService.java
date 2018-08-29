@@ -92,7 +92,7 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
     }
 
     @Override
-    public long getAlbumId() throws RemoteException {
+    public int getAlbumId() throws RemoteException {
         return  mMusicService.get().getAlbumId();
     }
 
@@ -102,7 +102,7 @@ public class MusicPlaybackService extends IMediaPlaybackService.Stub {
     }
 
     @Override
-    public long getArtistId() throws RemoteException {
+    public int getArtistId() throws RemoteException {
         return  mMusicService.get().getArtistId();
     }
 

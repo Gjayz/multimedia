@@ -36,9 +36,9 @@ interface IMediaPlaybackService
     long seek(long pos);
     String getTrackName();
     String getAlbumName();
-    long getAlbumId();
+    int getAlbumId();
     String getArtistName();
-    long getArtistId();
+    int getArtistId();
     void enqueue(in long [] list, int action);
     long [] getQueue();
     void moveQueueItem(int from, int to);
