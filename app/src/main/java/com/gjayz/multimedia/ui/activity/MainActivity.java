@@ -2,7 +2,6 @@ package com.gjayz.multimedia.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Outline;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -15,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;

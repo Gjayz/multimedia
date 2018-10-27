@@ -22,6 +22,7 @@ public class IntentUtil {
     public static final int TYPE_NET = 2;
     public static final int TYPE_SETTINGS = 3;
     public static final int TYPE_TEST = 4;
+    public static final int TYPE_TEST2 = 5;
 
     public static void startAboutActivity(Context context) {
         startToolBarActivity(context, context.getString(R.string.strAbout), TYPE_ABOUT);
@@ -41,6 +42,10 @@ public class IntentUtil {
 
     public static void startTestActivity(Context context) {
         startToolBarActivity(context, context.getString(R.string.strTest), TYPE_TEST);
+    }
+
+    public static void startTest2Activity(Context context) {
+        startToolBarActivity(context, context.getString(R.string.strTest), TYPE_TEST2);
     }
 
     public static void startToolBarActivity(Context context, String title, int tpye) {

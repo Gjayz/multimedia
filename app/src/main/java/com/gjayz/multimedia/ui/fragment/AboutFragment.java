@@ -19,6 +19,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
     private static final String KEY_DEVICE_INFO = "key_device_info";
     private static final String KEY_NETWORK = "key_network";
     private static final String KEY_TEST = "key_test";
+    private static final String KEY_TEST2 = "key_test2";
     private static final String MY_GITHUB = "https://github.com/Gjayz";
 
     public static AboutFragment newInstance() {
@@ -35,12 +36,14 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
         Preference devicePrefence = findPreference(KEY_DEVICE_INFO);
         Preference netPrefence = findPreference(KEY_NETWORK);
         Preference testPrefence = findPreference(KEY_TEST);
+        Preference test2Prefence = findPreference(KEY_TEST2);
 
         authorPrefence.setOnPreferenceClickListener(this);
         softPrefence.setOnPreferenceClickListener(this);
         devicePrefence.setOnPreferenceClickListener(this);
         netPrefence.setOnPreferenceClickListener(this);
         testPrefence.setOnPreferenceClickListener(this);
+        test2Prefence.setOnPreferenceClickListener(this);
 
         authorPrefence.setSummary(MY_GITHUB);
         softPrefence.setSummary("当前版本：" + BuildConfig.VERSION_NAME);
@@ -66,6 +69,9 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
                 break;
             case KEY_TEST:
                 IntentUtil.startTestActivity(getActivity());
+                break;
+            case KEY_TEST2:
+                IntentUtil.startTest2Activity(getActivity());
                 break;
         }
         return false;

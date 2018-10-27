@@ -1,9 +1,16 @@
 package com.gjayz.multimedia.ui.fragment;
 
+import android.graphics.Color;
+
 import com.gjayz.multimedia.R;
+import com.gjayz.theme.view.CricleColorView;
+
+import butterknife.BindView;
 
 public class TestFragment extends BaseFragment {
 
+    @BindView(R.id.cricle_color_view)
+    CricleColorView mCricleColorView;
 
     public static TestFragment newInstance() {
         return new TestFragment();
@@ -16,6 +23,6 @@ public class TestFragment extends BaseFragment {
 
     @Override
     public void init() {
-
+        mCricleColorView.setFillColor(Color.GREEN);
     }
 }

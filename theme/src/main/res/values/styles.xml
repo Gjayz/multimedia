@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearanceSmall" parent="@android:style/TextAppearance.Small" />
+
+    <style name="TextAppearance" parent="@android:style/TextAppearance" />
+
+    <style name="TextAppearanceMed" parent="@android:style/TextAppearance.Medium" />
+
+    <style name="TextAppearanceLarge" parent="@android:style/TextAppearance.Large" />
+
+</resources>

@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.gjayz.theme.view.CricleColorView
+        android:id="@+id/cricle_color_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/strTest" />
+        android:layout_height="100dp"/>
 
 </RelativeLayout>

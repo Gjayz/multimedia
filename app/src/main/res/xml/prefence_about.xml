@@ -27,6 +27,11 @@
             android:key="key_test"
             android:title="@string/strTest" />
 
+
+        <Preference
+            android:key="key_test2"
+            android:title="@string/strTest" />
+
     </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
 
 </PreferenceScreen>

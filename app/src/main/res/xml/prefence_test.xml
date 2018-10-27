@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory android:title="@string/strSelectColor">
+
+        <com.gjayz.theme.prefence.ColorPreference
+            android:key="key_choose_color"
+            android:title="@string/strChooseColor"
+            android:summary="@string/strChooseColorDetail" />
+
+        <com.gjayz.theme.prefence.ColorPreference
+            android:title="@string/strTest"
+            android:summary="@string/strChooseStyleForm" />
+
+        <Preference
+            android:title="@string/strTest"
+            android:summary="@string/strChooseStyleForm" />
+
+    </com.gjayz.multimedia.ui.widget.ThemedPreferenceCategory>
+
+
+</PreferenceScreen>

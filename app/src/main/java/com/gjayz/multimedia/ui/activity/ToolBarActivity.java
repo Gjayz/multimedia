@@ -11,12 +11,11 @@ import com.gjayz.multimedia.ui.fragment.AboutFragment;
 import com.gjayz.multimedia.ui.fragment.DeviceInfoFragment;
 import com.gjayz.multimedia.ui.fragment.NetFragment;
 import com.gjayz.multimedia.ui.fragment.SettingsFragment;
+import com.gjayz.multimedia.ui.fragment.Test2Fragment;
 import com.gjayz.multimedia.ui.fragment.TestFragment;
 import com.gjayz.multimedia.ui.utils.IntentUtil;
 
 public class ToolBarActivity extends BaseActivity {
-
-
 
     private int mType;
 
@@ -70,6 +69,12 @@ public class ToolBarActivity extends BaseActivity {
                 TestFragment testFragment = TestFragment.newInstance();
                 fragmentManager.beginTransaction()
                         .replace(R.id.about_framelayout, testFragment)
+                        .commit();
+                break;
+            case IntentUtil.TYPE_TEST2:
+                Test2Fragment test2Fragment = Test2Fragment.newInstance();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.about_framelayout, test2Fragment)
                         .commit();
                 break;
         }

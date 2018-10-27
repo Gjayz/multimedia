@@ -239,7 +239,10 @@ public class MusicManager {
                 while (cursor.moveToNext()) {
                     int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                     String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.GenresColumns.NAME));
-                    schoolInfoList.add(new School(id, name, getSchoolAudioList(id)));
+                    List<SongInfo> schoolAudioList = getSchoolAudioList(id);
+                    if (schoolAudioList.size() > 0){
+                        schoolInfoList.add(new School(id, name, schoolAudioList));
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -261,7 +264,10 @@ public class MusicManager {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     long audio_id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.Members.AUDIO_ID));
-                    songInfosList.add(getSong(audio_id));
+                    SongInfo song = getSong(audio_id);
+                    if (song != null){
+                        songInfosList.add(song);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -363,8 +369,11 @@ public class MusicManager {
                 cursor.close();
             }
         }
+
         List<Album> result = new ArrayList<>();
-        result.addAll(albumSet);
+        if (albumSet.size() > 0){
+            result.addAll(albumSet);
+        }
         return result;
     }
 
